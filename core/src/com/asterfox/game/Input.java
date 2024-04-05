@@ -41,14 +41,20 @@ public class Input implements InputProcessor {
         gs.cam.unproject(touchPos);
 
         if (gs.leftbutton.checkIfClicked(touchPos.x, touchPos.y)){
+            gs.leftbutton.button.setScale(1.5f,1.5f);
             gs.player.moveLeft();
+            gs.soundHandler.playEngine();
         }
         if (gs.rightButton.checkIfClicked(touchPos.x, touchPos.y)){
+            gs.rightButton.button.setScale(1.5f, 1.5f);
             gs.player.moveRight();
+            gs.soundHandler.playEngine();
         }
         if (gs.fireButton.checkIfClicked(touchPos.x, touchPos.y)){
+            gs.fireButton.button.setScale(1.5f, 1.5f);
             if (TimeUtils.nanoTime() - gs.lastBulletSpawned > 250000000){
                 gs.bullets.spawnBullet();
+                gs.soundHandler.playlaser();
             }
 
         }
@@ -57,7 +63,12 @@ public class Input implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        gs.leftbutton.button.setScale(1,1);
+        gs.rightButton.button.setScale(1, 1);
+        gs.fireButton.button.setScale(1, 1);
+
         gs.player.resetPlayerMovement();
+        gs.soundHandler.engine.stop();
         return false;
     }
 

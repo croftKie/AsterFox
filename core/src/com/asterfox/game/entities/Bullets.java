@@ -34,6 +34,7 @@ public class Bullets extends Entity{
             if (bullet.getBoundingRectangle().overlaps(iter.next().asteroid.getBoundingRectangle())){
                 iter.remove();
                 gs.score--;
+                gs.soundHandler.playExplosion();
                 return true;
             }
         }

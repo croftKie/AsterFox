@@ -6,8 +6,10 @@ import com.asterfox.game.entities.Button;
 import com.asterfox.game.entities.Player;
 import com.asterfox.game.managers.AsteroidHandler;
 import com.asterfox.game.managers.BulletHandler;
+import com.asterfox.game.managers.SoundHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,17 +33,20 @@ public class GameScreen implements Screen {
     public long lastBulletSpawned;
     public AsteroidHandler asteroids;
     public BulletHandler bullets;
+    public SoundHandler soundHandler;
     public int score = 20;
+    public Music bgMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.wav"));
 
     public GameScreen(AsterFox game){
        this.game = game;
-       this.cam =new OrthographicCamera();
+       this.cam = new OrthographicCamera();
        cam.setToOrtho(false, 800, 480);
 
        generateUI();
        generatePlayer();
        asteroids = new AsteroidHandler(this);
        bullets = new BulletHandler(this);
+       soundHandler = new SoundHandler(this);
 
        input = new Input(this);
        Gdx.input.setInputProcessor(input);
@@ -53,6 +58,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
+        soundHandler.playMusic();
     }
 
     @Override
@@ -106,7 +112,6 @@ public class GameScreen implements Screen {
         if (score == 0) {
             game.setScreen(new GameOver(game));
         }
-
 
     }
 
