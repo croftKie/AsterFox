@@ -2,6 +2,7 @@ package com.asterfox.game;
 
 import com.asterfox.game.entities.Asteroid;
 import com.asterfox.game.entities.Player;
+import com.asterfox.game.managers.WaveHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -28,7 +29,7 @@ public class MainMenu implements Screen {
         this.game = game;
 
         generatePlayer();
-        generateAsteroids();
+//        generateAsteroids();
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, vp_width, vp_height);
@@ -51,12 +52,12 @@ public class MainMenu implements Screen {
         game.batch.begin();
 
         player.draw(game);
-        large.asteroid.rotate(0.1f);
-        large.draw(game);
-        small.asteroid.rotate(-0.1f);
-        small.draw(game);
-        tiny.asteroid.rotate(-0.2f);
-        tiny.draw(game);
+//        large.asteroid.rotate(0.1f);
+//        large.draw(game);
+//        small.asteroid.rotate(-0.1f);
+//        small.draw(game);
+//        tiny.asteroid.rotate(-0.2f);
+//        tiny.draw(game);
 
 
         game.font.getData().setScale(scale,scale);
@@ -114,39 +115,39 @@ public class MainMenu implements Screen {
         player.player.setRotation(40);
         player.player.setScale(2);
     }
-    public void generateAsteroids(){
-        large = new Asteroid(
-                "meteor_large.png",
-                new float[]{
-                        700,
-                        400,
-                        64,
-                        64
-                }
-        );
-        large.asteroid.setScale(4);
-
-        small = new Asteroid(
-                "meteor_small.png",
-                new float[]{
-                        300,
-                        10,
-                        64,
-                        64
-                }
-        );
-        small.asteroid.setScale(4);
-
-        tiny = new Asteroid(
-                "meteor_small.png",
-                new float[]{
-                        400,
-                        300,
-                        64,
-                        64
-                }
-        );
-    }
+//    public void generateAsteroids(){
+//        large = new Asteroid(
+//                "meteor_large.png",
+//                new float[]{
+//                        700,
+//                        400,
+//                        64,
+//                        64
+//                }
+//        );
+//        large.asteroid.setScale(4);
+//
+//        small = new Asteroid(
+//                "meteor_small.png",
+//                new float[]{
+//                        300,
+//                        10,
+//                        64,
+//                        64
+//                }
+//        );
+//        small.asteroid.setScale(4);
+//
+//        tiny = new Asteroid(
+//                "meteor_small.png",
+//                new float[]{
+//                        400,
+//                        300,
+//                        64,
+//                        64
+//                }
+//        );
+//    }
     public void clickButton(){
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);

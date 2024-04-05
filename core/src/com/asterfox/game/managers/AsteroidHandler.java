@@ -36,7 +36,8 @@ public class AsteroidHandler {
                         500,
                         64,
                         64
-                }
+                },
+                gs
         );
         asteroids.add(asteroid);
     }

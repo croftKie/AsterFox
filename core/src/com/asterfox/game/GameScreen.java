@@ -36,7 +36,6 @@ public class GameScreen implements Screen {
     public BulletHandler bullets;
     public SoundHandler soundHandler;
     public WaveHandler waveHandler;
-    public int score = 20;
 
     public GameScreen(AsterFox game){
        this.game = game;
