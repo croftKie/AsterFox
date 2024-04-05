@@ -7,6 +7,7 @@ import com.asterfox.game.entities.Player;
 import com.asterfox.game.managers.AsteroidHandler;
 import com.asterfox.game.managers.BulletHandler;
 import com.asterfox.game.managers.SoundHandler;
+import com.asterfox.game.managers.WaveHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -34,8 +35,8 @@ public class GameScreen implements Screen {
     public AsteroidHandler asteroids;
     public BulletHandler bullets;
     public SoundHandler soundHandler;
+    public WaveHandler waveHandler;
     public int score = 20;
-    public Music bgMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.wav"));
 
     public GameScreen(AsterFox game){
        this.game = game;
@@ -47,6 +48,7 @@ public class GameScreen implements Screen {
        asteroids = new AsteroidHandler(this);
        bullets = new BulletHandler(this);
        soundHandler = new SoundHandler(this);
+       waveHandler = new WaveHandler(this);
 
        input = new Input(this);
        Gdx.input.setInputProcessor(input);
@@ -57,7 +59,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
         soundHandler.playMusic();
     }
 
@@ -82,11 +83,12 @@ public class GameScreen implements Screen {
         for (Asteroid asteroid: asteroids.asteroids){
             asteroid.draw(game);
         }
-
-        String scoreString = "Asteroids Left: " + score;
-        game.font.getData().setScale(2,2);
+        String waveString = "Wave: " + waveHandler.wave;
+        String scoreString = "Asteroids Left: " + waveHandler.score;
+        game.font.getData().setScale(1.5f,1.5f);
         game.font.setColor(Color.WHITE);
-        game.font.draw(game.batch, scoreString, 10, 440);
+        game.font.draw(game.batch, waveString, 10, 460);
+        game.font.draw(game.batch, scoreString, 10, 425);
 
         game.batch.end();
 
@@ -108,10 +110,6 @@ public class GameScreen implements Screen {
         bullets.moveDestroyBullets(asteroids);
         asteroids.moveDestroyAsteroids(bullets.bullets);
         asteroids.spawnAsteroid();
-
-        if (score == 0) {
-            game.setScreen(new GameOver(game));
-        }
 
     }
 
