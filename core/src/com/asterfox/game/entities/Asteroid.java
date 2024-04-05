@@ -41,4 +41,7 @@ public class Asteroid extends Entity{
         }
         return false;
     }
+    public boolean hasHitPlayer(Sprite player){
+        return asteroid.getBoundingRectangle().overlaps(player.getBoundingRectangle());
+    }
 }

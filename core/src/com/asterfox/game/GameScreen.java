@@ -95,20 +95,30 @@ public class GameScreen implements Screen {
 
 //        CHECK FOR INPUTS
 
-        if (Gdx.input.isTouched()){
-            input.touchDown(
-                    Gdx.input.getX(),
-                    Gdx.input.getY(),
-                    Gdx.input.getMaxPointers(),
-                    1
-            );
+        if (!player.destroyed){
+            if (Gdx.input.isTouched()){
+                input.touchDown(
+                        Gdx.input.getX(),
+                        Gdx.input.getY(),
+                        Gdx.input.getMaxPointers(),
+                        1
+                );
+            }
         }
 
 
-
+        player.collidedWithAsteroid(asteroids);
         bullets.moveDestroyBullets(asteroids);
         asteroids.moveDestroyAsteroids(bullets.bullets);
         asteroids.spawnAsteroid();
+
+        if(player.destroyed){
+            player.player.setY(player.player.getY() - 2);
+            player.player.rotate(4);
+            if(player.player.getY() < 64){
+                game.setScreen(new GameOver(game));
+            }
+        }
 
     }
 

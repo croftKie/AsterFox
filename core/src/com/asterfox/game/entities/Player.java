@@ -1,11 +1,14 @@
 package com.asterfox.game.entities;
 
 import com.asterfox.game.AsterFox;
+import com.asterfox.game.managers.AsteroidHandler;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+
+import java.util.Iterator;
 
 public class Player extends Entity{
     private OrthographicCamera cam;
@@ -13,7 +16,7 @@ public class Player extends Entity{
     public Texture EngineEffect;
     public Rectangle playerBounds = new Rectangle();
     public Rectangle engineEffectBounds = new Rectangle();
-
+    public boolean destroyed = false;
     public Player(String assetFile, float[] dimens, OrthographicCamera cam){
         this.cam = cam;
         player = createAsset(assetFile, dimens);
@@ -56,9 +59,15 @@ public class Player extends Entity{
     }
 
 
-    public void fireBullet(Array<Bullets> bullets){
-        for (Bullets bullet : bullets){
-            bullet.moveBullet();
+    public void collidedWithAsteroid(AsteroidHandler asteroids){
+        Iterator<Asteroid> AsterIt = asteroids.asteroids.iterator();
+        while (AsterIt.hasNext()){
+            Asteroid currentAsteroid = AsterIt.next();
+            currentAsteroid.moveAsteroid();
+            if (currentAsteroid.hasHitPlayer(player)){
+                currentAsteroid.asteroid.setX(-currentAsteroid.asteroid.getX());
+                destroyed = true;
+            }
         }
     }
 }

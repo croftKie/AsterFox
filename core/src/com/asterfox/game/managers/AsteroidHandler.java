@@ -47,9 +47,6 @@ public class AsteroidHandler {
         while (AsterIt.hasNext()){
             Asteroid currentAsteroid = AsterIt.next();
             currentAsteroid.moveAsteroid();
-            if (currentAsteroid.isDestroyable(bullets)){
-                AsterIt.remove();
-            }
         }
     }
 }
