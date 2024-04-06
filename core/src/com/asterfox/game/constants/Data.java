@@ -12,10 +12,11 @@ public class Data {
         public static final String[] text = new String[]{"AsterFox", "Tap Ship to Play"};
         public static final String[] intro = new String[]{
                 "You're not a hero...",
-                "You're a prisoner...",
-                "Trapped aboard a creaking spaceship...",
-                "If you want any chance of clearing your sentence.",
-                "You will need to destroy the asteroids ahead of you."
+                "You're a prisoner.",
+                "Trapped aboard a creaking spaceship,",
+                "With a life sentence.",
+                "If you want to end your sentence early.",
+                "Clear the asteroid fields."
         };
     }
 }

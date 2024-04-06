@@ -78,17 +78,18 @@ public class MainMenu implements Screen {
             game.font.getData().setScale(scale,scale);
             game.font.setColor(new Color(Color.WHITE));
             game.font.draw(game.batch, Data.UI.intro[0], 10, 400);
-            game.font.draw(game.batch, Data.UI.intro[1], 10, 370);
-            game.font.draw(game.batch, Data.UI.intro[2], 10, 340);
-            game.font.draw(game.batch, Data.UI.intro[3], 10, 310);
-            game.font.draw(game.batch, Data.UI.intro[4], 10, 280);
+            game.font.draw(game.batch, Data.UI.intro[1], 10, 350);
+            game.font.draw(game.batch, Data.UI.intro[2], 10, 300);
+            game.font.draw(game.batch, Data.UI.intro[3], 10, 250);
+            game.font.draw(game.batch, Data.UI.intro[4], 10, 200);
+            game.font.draw(game.batch, Data.UI.intro[5], 10, 150);
         }
 
 
         game.batch.end();
         if (Gdx.input.isTouched()) {
             if(intro){
-                clickButton(playerAlt);
+                clickButtonAlt(playerAlt);
             }
             clickButton(player);
         }
@@ -143,12 +144,15 @@ public class MainMenu implements Screen {
                 "ship.png",
                 new float[]{
                         600 - 64 / 2,
-                        140,
+                        370,
                         64,
                         64
                 },
                 cam
         );
+
+        playerAlt.player.setRotation(-40);
+        playerAlt.player.setScale(2);
     }
     public void generateAsteroids(){
         large = new Asteroid(
@@ -198,11 +202,21 @@ public class MainMenu implements Screen {
         cam.unproject(touchPos);
         if (touchPos.x > player.player.getX() && touchPos.x < player.player.getX() + player.player.getWidth()) {
             if (touchPos.y > player.player.getY() && touchPos.y < player.player.getY() + player.player.getHeight()) {
-                if(intro){
+
+                intro = true;
+
+            }
+        }
+    };
+    public void clickButtonAlt(Player player){
+        Vector3 touchPos = new Vector3();
+        touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        cam.unproject(touchPos);
+        if (touchPos.x > player.player.getX() && touchPos.x < player.player.getX() + player.player.getWidth()) {
+            if (touchPos.y > player.player.getY() && touchPos.y < player.player.getY() + player.player.getHeight()) {
+                if(intro) {
                     game.setScreen(new GameScreen(game));
                     dispose();
-                } else {
-                    intro = true;
                 }
             }
         }
