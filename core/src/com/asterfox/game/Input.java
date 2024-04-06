@@ -63,7 +63,6 @@ public class Input implements InputProcessor {
         gs.leftbutton.button.setScale(1,1);
         gs.rightButton.button.setScale(1, 1);
         gs.fireButton.button.setScale(1, 1);
-
         gs.player.resetPlayerMovement();
         gs.soundHandler.engine.stop();
         return false;

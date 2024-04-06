@@ -39,14 +39,16 @@ public class GameScreen implements Screen {
        this.cam = new OrthographicCamera();
        cam.setToOrtho(false, 800, 480);
 
+        bullets = new BulletHandler(this);
+        asteroids = new AsteroidHandler(this);
+        soundHandler = new SoundHandler(this);
+        waveHandler = new WaveHandler(this);
+        aniHandler = new AnimationHandler(this);
+
        generateUI();
        generatePlayer();
 
-       bullets = new BulletHandler(this);
-       asteroids = new AsteroidHandler(this);
-       soundHandler = new SoundHandler(this);
-       waveHandler = new WaveHandler(this);
-       aniHandler = new AnimationHandler(this);
+
 
        input = new Input(this);
        Gdx.input.setInputProcessor(input);
