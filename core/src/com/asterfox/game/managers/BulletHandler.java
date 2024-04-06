@@ -39,8 +39,8 @@ public class BulletHandler {
         }
     }
 
-    public void spawnBullet(){
-        if (TimeUtils.nanoTime() - lastBulletSpawned > 250000000){
+    public boolean spawnBullet(){
+        if (TimeUtils.nanoTime() - lastBulletSpawned > 500000000){
             Bullet bullet = new Bullet(
                     "bullet.png",
                     new float[]{
@@ -52,6 +52,8 @@ public class BulletHandler {
                     gs);
             bullets.add(bullet);
             lastBulletSpawned = TimeUtils.nanoTime();
+            return true;
         }
+        return false;
     };
 }

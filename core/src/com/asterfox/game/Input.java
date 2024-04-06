@@ -52,8 +52,10 @@ public class Input implements InputProcessor {
         }
         if (gs.fireButton.checkIfClicked(touchPos.x, touchPos.y)){
             gs.fireButton.button.setScale(1.5f, 1.5f);
-            gs.bullets.spawnBullet();
-            gs.soundHandler.playlaser();
+            boolean spawned = gs.bullets.spawnBullet();
+            if (spawned){
+                gs.soundHandler.playlaser();
+            }
         }
         return false;
     }

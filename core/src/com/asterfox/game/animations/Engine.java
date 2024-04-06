@@ -32,7 +32,6 @@ public class Engine {
 
     public void render(AsterFox game, float delta){
         float key = num += delta;
-
         game.batch.draw(animation.getKeyFrame(key, true), x, y, 64, 64);
 
     }

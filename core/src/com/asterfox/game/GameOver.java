@@ -47,7 +47,6 @@ public class GameOver implements Screen {
 
         game.font.getData().setScale(2,2);
         game.font.setColor(Color.BLACK);
-        game.batch.draw(menuBackground, menuRect.x, menuRect.y, menuRect.width, menuRect.height);
         game.font.draw(game.batch, "Game Over!", 350, 330);
         game.font.draw(game.batch, "Tap to Try Again", 335, 230);
         game.batch.end();

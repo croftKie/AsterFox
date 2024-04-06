@@ -32,7 +32,7 @@ public class AsteroidHandler {
         }
     }
     public void update(){
-        for (int i = 0; i <asteroids.size; i++) {
+        for (int i = 0; i < asteroids.size; i++) {
             if (asteroids.get(i).isDestroyable()){
                 asteroids.removeIndex(i);
             }
@@ -41,7 +41,8 @@ public class AsteroidHandler {
     }
 
     public void spawnAsteroid(){
-        if (TimeUtils.nanoTime() - lastAsteroidSpawned > 1000000000){
+        System.out.println(1000000000 * (gs.waveHandler.wave * 0.55f));
+        if (TimeUtils.nanoTime() - lastAsteroidSpawned > 1000000000 * (gs.waveHandler.wave * 0.55f)){
             Asteroid asteroid = new Asteroid(
                     asteroidAssets[MathUtils.random(0,3)],
                     new float[]{

@@ -22,6 +22,7 @@ public class AnimationHandler {
         }
 
         if (!engine.complete){
+
             engine.render(gs.game, Gdx.graphics.getDeltaTime());
         }
 
