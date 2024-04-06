@@ -27,11 +27,14 @@ public class MainMenu implements Screen {
     private Asteroid small;
     private Asteroid tiny;
     private boolean intro = false;
+    private Texture title;
+    private Texture tap_title;
     public MainMenu(AsterFox game){
         this.game = game;
 
         generatePlayer();
         generateAsteroids();
+        generateMenuImages();
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, vp_width, vp_height);
@@ -64,16 +67,21 @@ public class MainMenu implements Screen {
             tiny.asteroid.rotate(-0.2f);
             tiny.render(game);
 
-            game.font.getData().setScale(scale,scale);
-            game.font.setColor(new Color(0xFFFFFF));
-            game.font.draw(game.batch, text[0], 10, 440);
-            game.font.setColor(new Color(Color.WHITE));
-            game.font.draw(game.batch, text[1], 10, 360);
+            game.batch.draw(title, 10, 320, 256, 128);
+            game.batch.draw(tap_title, 10, 200, 256 + 128, 128);
+
+//            game.font.getData().setScale(scale,scale);
+//            game.font.setColor(new Color(0xFFFFFF));
+//            game.font.draw(game.batch, text[0], 10, 440);
+//            game.font.setColor(new Color(Color.WHITE));
+//            game.font.draw(game.batch, text[1], 10, 360);
         }
 
         if (intro) {
 
             playerAlt.draw(game);
+
+
 
             game.font.getData().setScale(scale,scale);
             game.font.setColor(new Color(Color.WHITE));
@@ -202,7 +210,7 @@ public class MainMenu implements Screen {
         cam.unproject(touchPos);
         if (touchPos.x > player.player.getX() && touchPos.x < player.player.getX() + player.player.getWidth()) {
             if (touchPos.y > player.player.getY() && touchPos.y < player.player.getY() + player.player.getHeight()) {
-
+                player.player.setScale(1.5f);
                 intro = true;
 
             }
@@ -221,4 +229,9 @@ public class MainMenu implements Screen {
             }
         }
     };
+
+    public void generateMenuImages(){
+        title = new Texture(Gdx.files.internal("title.png"));
+        tap_title = new Texture(Gdx.files.internal("tap_text.png"));
+    }
 }
