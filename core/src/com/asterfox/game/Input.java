@@ -1,6 +1,6 @@
 package com.asterfox.game;
 
-import com.asterfox.game.entities.Bullets;
+import com.asterfox.game.entities.Bullet;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
@@ -52,11 +52,8 @@ public class Input implements InputProcessor {
         }
         if (gs.fireButton.checkIfClicked(touchPos.x, touchPos.y)){
             gs.fireButton.button.setScale(1.5f, 1.5f);
-            if (TimeUtils.nanoTime() - gs.lastBulletSpawned > 250000000){
-                gs.bullets.spawnBullet();
-                gs.soundHandler.playlaser();
-            }
-
+            gs.bullets.spawnBullet();
+            gs.soundHandler.playlaser();
         }
         return false;
     }

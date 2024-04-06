@@ -1,41 +1,38 @@
 package com.asterfox.game;
 
-import com.asterfox.game.entities.Asteroid;
-import com.asterfox.game.entities.Bullets;
+import com.asterfox.game.entities.Bullet;
 import com.asterfox.game.entities.Button;
 import com.asterfox.game.entities.Player;
+import com.asterfox.game.managers.AnimationHandler;
 import com.asterfox.game.managers.AsteroidHandler;
 import com.asterfox.game.managers.BulletHandler;
 import com.asterfox.game.managers.SoundHandler;
 import com.asterfox.game.managers.WaveHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.TimeUtils;
-
-import java.sql.Time;
-import java.util.Iterator;
-import java.util.Random;
 
 public class GameScreen implements Screen {
-    final AsterFox game;
-    final OrthographicCamera cam;
+    public AsterFox game;
+    public OrthographicCamera cam;
+    public float elapsedTime;
     public Player player;
     public Button leftbutton, rightButton, fireButton;
     public Input input;
-    public long lastBulletSpawned;
     public AsteroidHandler asteroids;
     public BulletHandler bullets;
     public SoundHandler soundHandler;
     public WaveHandler waveHandler;
+    public AnimationHandler aniHandler;
+    public Animation<TextureRegion> ani;
+
+    public Sprite hitAsteroid = null;
 
     public GameScreen(AsterFox game){
        this.game = game;
@@ -44,13 +41,19 @@ public class GameScreen implements Screen {
 
        generateUI();
        generatePlayer();
-       asteroids = new AsteroidHandler(this);
+
        bullets = new BulletHandler(this);
+       asteroids = new AsteroidHandler(this);
        soundHandler = new SoundHandler(this);
        waveHandler = new WaveHandler(this);
+       aniHandler = new AnimationHandler(this);
 
        input = new Input(this);
        Gdx.input.setInputProcessor(input);
+
+
+        TextureAtlas charSet = new TextureAtlas(Gdx.files.internal("explosion.atlas"));
+        ani = new Animation<>(1/25f, charSet.findRegions("light"));
     }
 
 
@@ -66,22 +69,31 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(Color.BLACK);
         cam.update();
         game.batch.setProjectionMatrix(cam.combined);
+        elapsedTime += delta;
+
+//        SPAWNERS
+        asteroids.spawnAsteroid();
+
+//        UPDATERS
+        bullets.update();
+        asteroids.update();
+        aniHandler.update();
 
 
 //        RENDER BATCH
         game.batch.begin();
+
+
         player.draw(game);
         leftbutton.draw(game);
         rightButton.draw(game);
         fireButton.draw(game);
 
-        for (Bullets bullet: bullets.bullets){
-            bullet.draw(game);
-        }
+        bullets.render();
+        asteroids.render();
+        aniHandler.render();
 
-        for (Asteroid asteroid: asteroids.asteroids){
-            asteroid.draw(game);
-        }
+
         String waveString = "Wave: " + waveHandler.wave;
         String scoreString = "Asteroids Left: " + waveHandler.score;
         game.font.getData().setScale(1.5f,1.5f);
@@ -91,10 +103,10 @@ public class GameScreen implements Screen {
 
         game.batch.end();
 
+        player.destroyPlayer(asteroids);
 
 
 //        CHECK FOR INPUTS
-
         if (!player.destroyed){
             if (Gdx.input.isTouched()){
                 input.touchDown(
@@ -106,16 +118,11 @@ public class GameScreen implements Screen {
             }
         }
 
-
-        player.collidedWithAsteroid(asteroids);
-        bullets.moveDestroyBullets(asteroids);
-        asteroids.moveDestroyAsteroids(bullets.bullets);
-        asteroids.spawnAsteroid();
-
         if(player.destroyed){
+            System.out.println("firing");
             player.player.setY(player.player.getY() - 2);
             player.player.rotate(4);
-            if(player.player.getY() < 64){
+            if(player.player.getY() < - 64){
                 game.setScreen(new GameOver(game));
             }
         }
@@ -144,7 +151,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        this.dispose();
     }
 
 
@@ -154,6 +161,7 @@ public class GameScreen implements Screen {
 
     public void generatePlayer(){
         player = new Player(
+                this,
                 "ship.png",
                 new float[]{
                         800 / 2 - 64 / 2,

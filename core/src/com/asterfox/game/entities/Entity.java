@@ -3,12 +3,10 @@ package com.asterfox.game.entities;
 import com.asterfox.game.AsterFox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
-import org.w3c.dom.Text;
 
 public class Entity {
 
@@ -52,6 +50,9 @@ public class Entity {
     }
     public void draw(AsterFox game, Sprite asset){
         asset.draw(game.batch);
+    }
+    public void draw(AsterFox game, float elapsedTime, Animation<TextureRegion> ani, float x, float y){
+        game.batch.draw(ani.getKeyFrame(elapsedTime), x, y);
     }
 
 

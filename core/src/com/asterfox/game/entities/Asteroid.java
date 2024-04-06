@@ -2,46 +2,58 @@ package com.asterfox.game.entities;
 
 import com.asterfox.game.AsterFox;
 import com.asterfox.game.GameScreen;
+import com.asterfox.game.MainMenu;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
-
-import java.util.Iterator;
 
 public class Asteroid extends Entity{
-    public GameScreen gs;
-    public Sprite asteroid;
-    public int[] rotationOptions = new int[]{2, 4, -1, -3};
-    public float[] xOptions = new float[]{2, -1, 0, 0.5f, -0.2f, 1.3f};
-    public int rotation;
+    public int rotationOption;
     public float xOption;
+    public Sprite asteroid;
+    private GameScreen gs;
+    private MainMenu mm;
 
-    public Asteroid(String assetFile, float[] dimens, GameScreen gs){
+    public Asteroid(String asset, float[] dimens, GameScreen gs, int rotationOption, float xOption){
+        asteroid = createAsset(asset, dimens);
         this.gs = gs;
-        asteroid = createAsset(assetFile, dimens);
-        this.rotation = rotationOptions[MathUtils.random(0, 3)];
-        this.xOption = xOptions[MathUtils.random(0,5)];
+        this.rotationOption = rotationOption;
+        this.xOption = xOption;
     }
 
+    public Asteroid(String asset, float[] dimens, MainMenu mm, int rotationOption, float xOption){
+        asteroid = createAsset(asset, dimens);
+        this.mm = mm;
+        this.rotationOption = rotationOption;
+        this.xOption = xOption;
+    }
 
-    public void draw(AsterFox game){
+    public void render(AsterFox game){
         draw(game, asteroid);
     }
 
-    public void moveAsteroid(){
+    public void update(){
+        moveAsteroid();
+    }
+
+    private void moveAsteroid(){
         float y = asteroid.getY() - (3 * (gs.waveHandler.wave * 0.55f));
         asteroid.setY(y);
         asteroid.setX(asteroid.getX() + xOption);
-        asteroid.rotate(rotation);
+        asteroid.rotate(rotationOption);
     }
 
-    public boolean isDestroyable(Array<Bullets> bullets){
-        if(asteroid.getY() < 0){
+    public boolean isDestroyable(){
+        if(asteroid.getBoundingRectangle().getY() < 0 - 64){
             return true;
         }
+        for (int i = 0; i < gs.bullets.bullets.size; i++) {
+            if (asteroid.getBoundingRectangle().overlaps(gs.bullets.bullets.get(i).bullet.getBoundingRectangle())) {
+
+                gs.bullets.bullets.removeIndex(i);
+                gs.waveHandler.decreaseScore();
+                gs.soundHandler.playExplosion();
+                break;
+            }
+        }
         return false;
-    }
-    public boolean hasHitPlayer(Sprite player){
-        return asteroid.getBoundingRectangle().overlaps(player.getBoundingRectangle());
     }
 }

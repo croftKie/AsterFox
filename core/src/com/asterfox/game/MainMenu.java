@@ -1,5 +1,6 @@
 package com.asterfox.game;
 
+import com.asterfox.game.constants.Data;
 import com.asterfox.game.entities.Asteroid;
 import com.asterfox.game.entities.Player;
 import com.asterfox.game.managers.WaveHandler;
@@ -21,15 +22,16 @@ public class MainMenu implements Screen {
     final AsterFox game;
     final OrthographicCamera cam;
     private Player player;
+    private Player playerAlt;
     private Asteroid large;
     private Asteroid small;
     private Asteroid tiny;
-
+    private boolean intro = false;
     public MainMenu(AsterFox game){
         this.game = game;
 
         generatePlayer();
-//        generateAsteroids();
+        generateAsteroids();
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, vp_width, vp_height);
@@ -51,24 +53,44 @@ public class MainMenu implements Screen {
 
         game.batch.begin();
 
-        player.draw(game);
-//        large.asteroid.rotate(0.1f);
-//        large.draw(game);
-//        small.asteroid.rotate(-0.1f);
-//        small.draw(game);
-//        tiny.asteroid.rotate(-0.2f);
-//        tiny.draw(game);
 
+        if (!intro){
 
-        game.font.getData().setScale(scale,scale);
-        game.font.setColor(new Color(0xFFFFFF));
-        game.font.draw(game.batch, text[0], 10, 440);
-        game.font.setColor(new Color(Color.WHITE));
-        game.font.draw(game.batch, text[1], 10, 360);
+            player.draw(game);
+            large.asteroid.rotate(0.1f);
+            large.render(game);
+            small.asteroid.rotate(-0.1f);
+            small.render(game);
+            tiny.asteroid.rotate(-0.2f);
+            tiny.render(game);
+
+            game.font.getData().setScale(scale,scale);
+            game.font.setColor(new Color(0xFFFFFF));
+            game.font.draw(game.batch, text[0], 10, 440);
+            game.font.setColor(new Color(Color.WHITE));
+            game.font.draw(game.batch, text[1], 10, 360);
+        }
+
+        if (intro) {
+
+            playerAlt.draw(game);
+
+            game.font.getData().setScale(scale,scale);
+            game.font.setColor(new Color(Color.WHITE));
+            game.font.draw(game.batch, Data.UI.intro[0], 10, 400);
+            game.font.draw(game.batch, Data.UI.intro[1], 10, 370);
+            game.font.draw(game.batch, Data.UI.intro[2], 10, 340);
+            game.font.draw(game.batch, Data.UI.intro[3], 10, 310);
+            game.font.draw(game.batch, Data.UI.intro[4], 10, 280);
+        }
+
 
         game.batch.end();
         if (Gdx.input.isTouched()) {
-            clickButton();
+            if(intro){
+                clickButton(playerAlt);
+            }
+            clickButton(player);
         }
     }
 
@@ -103,6 +125,7 @@ public class MainMenu implements Screen {
 
     public void generatePlayer(){
         player = new Player(
+                this,
                 "ship.png",
                 new float[]{
                         600 - 64 / 2,
@@ -114,49 +137,74 @@ public class MainMenu implements Screen {
         );
         player.player.setRotation(40);
         player.player.setScale(2);
+
+        playerAlt = new Player(
+                this,
+                "ship.png",
+                new float[]{
+                        600 - 64 / 2,
+                        140,
+                        64,
+                        64
+                },
+                cam
+        );
     }
-//    public void generateAsteroids(){
-//        large = new Asteroid(
-//                "meteor_large.png",
-//                new float[]{
-//                        700,
-//                        400,
-//                        64,
-//                        64
-//                }
-//        );
-//        large.asteroid.setScale(4);
-//
-//        small = new Asteroid(
-//                "meteor_small.png",
-//                new float[]{
-//                        300,
-//                        10,
-//                        64,
-//                        64
-//                }
-//        );
-//        small.asteroid.setScale(4);
-//
-//        tiny = new Asteroid(
-//                "meteor_small.png",
-//                new float[]{
-//                        400,
-//                        300,
-//                        64,
-//                        64
-//                }
-//        );
-//    }
-    public void clickButton(){
+    public void generateAsteroids(){
+        large = new Asteroid(
+                "meteor_large.png",
+                new float[]{
+                        700,
+                        400,
+                        64,
+                        64,
+                },
+                this,
+                1,
+                1
+        );
+        large.asteroid.setScale(4);
+
+        small = new Asteroid(
+                "meteor_small.png",
+                new float[]{
+                        300,
+                        10,
+                        64,
+                        64
+                },
+                this,
+                1,
+                1
+        );
+        small.asteroid.setScale(4);
+
+        tiny = new Asteroid(
+                "meteor_small.png",
+                new float[]{
+                        400,
+                        300,
+                        64,
+                        64
+                },
+                this,
+                1,
+                1
+        );
+    }
+    public void clickButton(Player player){
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(touchPos);
         if (touchPos.x > player.player.getX() && touchPos.x < player.player.getX() + player.player.getWidth()) {
             if (touchPos.y > player.player.getY() && touchPos.y < player.player.getY() + player.player.getHeight()) {
-                game.setScreen(new GameScreen(game));
-                dispose();
+                if(intro){
+                    game.setScreen(new GameScreen(game));
+                    dispose();
+                } else {
+                    intro = true;
+                }
             }
         }
-    }
+    };
 }
