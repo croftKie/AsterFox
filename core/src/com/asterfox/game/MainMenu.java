@@ -28,7 +28,7 @@ public class MainMenu implements Screen {
     private Asteroid tiny;
     private boolean intro = false;
     private Texture title;
-    private Texture tap_title;
+    private Texture play, about, quit, intro_texts;
     public MainMenu(AsterFox game){
         this.game = game;
 
@@ -67,30 +67,16 @@ public class MainMenu implements Screen {
             tiny.asteroid.rotate(-0.2f);
             tiny.render(game);
 
-            game.batch.draw(title, 10, 320, 256, 128);
-            game.batch.draw(tap_title, 10, 200, 256 + 128, 128);
+            game.batch.draw(title, 10, 350, 256, 64);
+            game.batch.draw(play, 140, 270, 128, 64);
+            game.batch.draw(about, 140, 200, 128, 84);
+            game.batch.draw(quit, 140, 150, 128, 64);
 
-//            game.font.getData().setScale(scale,scale);
-//            game.font.setColor(new Color(0xFFFFFF));
-//            game.font.draw(game.batch, text[0], 10, 440);
-//            game.font.setColor(new Color(Color.WHITE));
-//            game.font.draw(game.batch, text[1], 10, 360);
         }
 
         if (intro) {
-
+            game.batch.draw(intro_texts, 10, 90, 576, 460);
             playerAlt.draw(game);
-
-
-
-            game.font.getData().setScale(scale,scale);
-            game.font.setColor(new Color(Color.WHITE));
-            game.font.draw(game.batch, Data.UI.intro[0], 10, 400);
-            game.font.draw(game.batch, Data.UI.intro[1], 10, 350);
-            game.font.draw(game.batch, Data.UI.intro[2], 10, 300);
-            game.font.draw(game.batch, Data.UI.intro[3], 10, 250);
-            game.font.draw(game.batch, Data.UI.intro[4], 10, 200);
-            game.font.draw(game.batch, Data.UI.intro[5], 10, 150);
         }
 
 
@@ -232,6 +218,9 @@ public class MainMenu implements Screen {
 
     public void generateMenuImages(){
         title = new Texture(Gdx.files.internal("title.png"));
-        tap_title = new Texture(Gdx.files.internal("tap_text.png"));
+        play = new Texture(Gdx.files.internal("play.png"));
+        about = new Texture(Gdx.files.internal("about.png"));
+        quit = new Texture(Gdx.files.internal("quit.png"));
+        intro_texts = new Texture(Gdx.files.internal("intro_text.png"));
     }
 }

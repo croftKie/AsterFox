@@ -13,6 +13,7 @@ public class BulletHandler {
     public Array<Bullet> bullets;
     private final GameScreen gs;
     public long lastBulletSpawned;
+    public int bulletsLoaded = 6;
 
     public BulletHandler(GameScreen gs){
         this.gs = gs;
@@ -28,18 +29,19 @@ public class BulletHandler {
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).update();
             if (bullets.get(i).isDestroyable()){
-
                 gs.aniHandler.createExplosionAnim(
                         bullets.get(i).bullet.getX() - (bullets.get(i).bullet.getWidth() / 2),
                         bullets.get(i).bullet.getY() + (bullets.get(i).bullet.getHeight() / 2)
                 );
-
                 bullets.removeIndex(i);
             }
         }
     }
 
     public boolean spawnBullet(){
+        if (bulletsLoaded == 0){
+            return false;
+        }
         if (TimeUtils.nanoTime() - lastBulletSpawned > 500000000){
             Bullet bullet = new Bullet(
                     "bullet.png",
@@ -52,6 +54,8 @@ public class BulletHandler {
                     gs);
             bullets.add(bullet);
             lastBulletSpawned = TimeUtils.nanoTime();
+            bulletsLoaded--;
+            gs.uiHandler.generateHUD();
             return true;
         }
         return false;

@@ -26,8 +26,6 @@ public class SoundHandler {
         engine.setLooping(true);
     }
 
-
-
     public void playMusic(){
         bgMusic.play();
     }

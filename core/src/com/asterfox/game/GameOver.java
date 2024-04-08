@@ -1,5 +1,6 @@
 package com.asterfox.game;
 
+import com.asterfox.game.entities.Asteroid;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -14,7 +15,8 @@ public class GameOver implements Screen {
     final OrthographicCamera cam;
     final Texture menuBackground;
     final Rectangle menuRect;
-
+    private Texture over;
+    private Asteroid large;
     public GameOver(AsterFox game){
         this.game = game;
 
@@ -24,6 +26,9 @@ public class GameOver implements Screen {
         menuRect.y = 480 / 2 - 150;
         menuRect.width = 300;
         menuRect.height = 300;
+
+        generateMenuImages();
+        generateAsteroids();
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, 800, 480);
@@ -45,10 +50,9 @@ public class GameOver implements Screen {
 
         game.batch.begin();
 
-        game.font.getData().setScale(2,2);
-        game.font.setColor(Color.BLACK);
-        game.font.draw(game.batch, "Game Over!", 350, 330);
-        game.font.draw(game.batch, "Tap to Try Again", 335, 230);
+        large.render(game);
+        game.batch.draw(over, 10, 90, 576, 460);
+
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
@@ -81,4 +85,26 @@ public class GameOver implements Screen {
     public void dispose() {
 
     }
+
+
+    public void generateMenuImages(){
+        over = new Texture(Gdx.files.internal("over_text.png"));
+    }
+
+    public void generateAsteroids(){
+        large = new Asteroid(
+                "meteor_large.png",
+                new float[]{
+                        700,
+                        400,
+                        64,
+                        64,
+                },
+                this,
+                1,
+                1
+        );
+        large.asteroid.setScale(4);
+    }
+
 }

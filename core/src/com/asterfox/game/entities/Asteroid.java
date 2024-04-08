@@ -1,6 +1,7 @@
 package com.asterfox.game.entities;
 
 import com.asterfox.game.AsterFox;
+import com.asterfox.game.GameOver;
 import com.asterfox.game.GameScreen;
 import com.asterfox.game.MainMenu;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,6 +12,7 @@ public class Asteroid extends Entity{
     public Sprite asteroid;
     private GameScreen gs;
     private MainMenu mm;
+    private GameOver gm;
 
     public Asteroid(String asset, float[] dimens, GameScreen gs, int rotationOption, float xOption){
         asteroid = createAsset(asset, dimens);
@@ -22,6 +24,12 @@ public class Asteroid extends Entity{
     public Asteroid(String asset, float[] dimens, MainMenu mm, int rotationOption, float xOption){
         asteroid = createAsset(asset, dimens);
         this.mm = mm;
+        this.rotationOption = rotationOption;
+        this.xOption = xOption;
+    }
+    public Asteroid(String asset, float[] dimens, GameOver gm, int rotationOption, float xOption){
+        asteroid = createAsset(asset, dimens);
+        this.gm = gm;
         this.rotationOption = rotationOption;
         this.xOption = xOption;
     }
@@ -50,7 +58,6 @@ public class Asteroid extends Entity{
 
                 gs.bullets.bullets.removeIndex(i);
                 gs.waveHandler.decreaseScore();
-                gs.soundHandler.playExplosion();
                 break;
             }
         }

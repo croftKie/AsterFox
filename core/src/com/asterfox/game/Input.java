@@ -40,32 +40,44 @@ public class Input implements InputProcessor {
         touchPos.set(screenX, screenY, 0);
         gs.cam.unproject(touchPos);
 
-        if (gs.leftbutton.checkIfClicked(touchPos.x, touchPos.y)){
-            gs.leftbutton.button.setScale(1.5f,1.5f);
+        if (gs.uiHandler.leftbutton.checkIfClicked(touchPos.x, touchPos.y)){
+            gs.uiHandler.leftbutton.button.setScale(1.5f,1.5f);
             gs.player.moveLeft();
             gs.soundHandler.playEngine();
         }
-        if (gs.rightButton.checkIfClicked(touchPos.x, touchPos.y)){
-            gs.rightButton.button.setScale(1.5f, 1.5f);
+        if (gs.uiHandler.rightButton.checkIfClicked(touchPos.x, touchPos.y)){
+            gs.uiHandler.rightButton.button.setScale(1.5f, 1.5f);
             gs.player.moveRight();
             gs.soundHandler.playEngine();
         }
-        if (gs.fireButton.checkIfClicked(touchPos.x, touchPos.y)){
-            gs.fireButton.button.setScale(1.5f, 1.5f);
+        if (gs.uiHandler.fireButton.checkIfClicked(touchPos.x, touchPos.y)){
+            gs.uiHandler.fireButton.button.setScale(1.5f, 1.5f);
             boolean spawned = gs.bullets.spawnBullet();
             if (spawned){
                 gs.soundHandler.playlaser();
             }
+        }
+        if (gs.uiHandler.speedButton.checkIfClicked(touchPos.x, touchPos.y)){
+            gs.uiHandler.speedButton.button.setScale(1.5f, 1.5f);
+            gs.player.speed = 7;
+        }
+        if (gs.uiHandler.reloadButton.checkIfClicked(touchPos.x, touchPos.y)){
+            gs.uiHandler.reloadButton.button.setScale(1.5f, 1.5f);
+            gs.bullets.bulletsLoaded = 6;
+            gs.uiHandler.generateHUD();
         }
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        gs.leftbutton.button.setScale(1,1);
-        gs.rightButton.button.setScale(1, 1);
-        gs.fireButton.button.setScale(1, 1);
+        gs.uiHandler.leftbutton.button.setScale(1,1);
+        gs.uiHandler.rightButton.button.setScale(1, 1);
+        gs.uiHandler.fireButton.button.setScale(1, 1);
+        gs.uiHandler.speedButton.button.setScale(1, 1);
+        gs.uiHandler.reloadButton.button.setScale(1, 1);
         gs.player.resetPlayerMovement();
+        gs.player.speed = 5;
         gs.soundHandler.engine.stop();
         return false;
     }

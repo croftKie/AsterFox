@@ -22,12 +22,10 @@ public class AnimationHandler {
         }
 
         if (!engine.complete){
-
             engine.render(gs.game, Gdx.graphics.getDeltaTime());
         }
 
     }
-
     public void update(){
         for (int i = 0; i < exploAnimations.size; i++) {
             if(exploAnimations.get(i).complete){
@@ -41,7 +39,6 @@ public class AnimationHandler {
                     gs.player.player.getY() - gs.player.player.getHeight());
         }
     }
-
     public void createExplosionAnim(float x, float y){
         Explosion explosion = new Explosion(
                 gs,
@@ -49,7 +46,6 @@ public class AnimationHandler {
                 x);
         exploAnimations.add(explosion);
     }
-
     public void createEngineAnim(float x, float y){
         Engine e = new Engine(
                 gs,

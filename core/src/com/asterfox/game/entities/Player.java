@@ -17,10 +17,10 @@ import java.util.Iterator;
 public class Player extends Entity{
     private OrthographicCamera cam;
     public Sprite player;
-    public Engine engineAnim;
     public GameScreen gs;
     public MainMenu mm;
     public boolean destroyed = false;
+    public int speed = 5;
     public Player(GameScreen gs, String assetFile, float[] dimens, OrthographicCamera cam){
         this.gs = (GameScreen) gs;
         this.cam = cam;
@@ -43,7 +43,7 @@ public class Player extends Entity{
     }
 
     public void moveLeft(){
-        float x = player.getX() - 5;
+        float x = player.getX() - speed;
 
         if (x > 0){
             player.setX(x);
@@ -51,7 +51,7 @@ public class Player extends Entity{
         }
     }
     public void moveRight(){
-        float x = player.getX() + 5;
+        float x = player.getX() + speed;
         if (x < 800 - 64){
             player.setX(x);
             player.setRotation(-10);
@@ -67,8 +67,13 @@ public class Player extends Entity{
         while (AsterIt.hasNext()){
             Asteroid currentAsteroid = AsterIt.next();
             if (currentAsteroid.asteroid.getBoundingRectangle().overlaps(player.getBoundingRectangle())){
-                currentAsteroid.asteroid.setX(currentAsteroid.asteroid.getX() + -4);
+                currentAsteroid.asteroid.setX(-currentAsteroid.asteroid.getX());
                 gs.aniHandler.engine.complete = true;
+                gs.soundHandler.playExplosion();
+                gs.aniHandler.createExplosionAnim(
+                        player.getX() - (player.getWidth() / 2),
+                        player.getY() + (player.getHeight() / 2)
+                );
                 destroyed =  true;
                 break;
             }

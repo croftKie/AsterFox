@@ -7,6 +7,7 @@ import com.asterfox.game.managers.AnimationHandler;
 import com.asterfox.game.managers.AsteroidHandler;
 import com.asterfox.game.managers.BulletHandler;
 import com.asterfox.game.managers.SoundHandler;
+import com.asterfox.game.managers.UiHandler;
 import com.asterfox.game.managers.WaveHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -30,7 +31,7 @@ public class GameScreen implements Screen {
     public SoundHandler soundHandler;
     public WaveHandler waveHandler;
     public AnimationHandler aniHandler;
-    public Animation<TextureRegion> ani;
+    public UiHandler uiHandler;
 
     public Sprite hitAsteroid = null;
 
@@ -44,8 +45,8 @@ public class GameScreen implements Screen {
         soundHandler = new SoundHandler(this);
         waveHandler = new WaveHandler(this);
         aniHandler = new AnimationHandler(this);
+        uiHandler = new UiHandler(this);
 
-       generateUI();
        generatePlayer();
 
 
@@ -53,9 +54,6 @@ public class GameScreen implements Screen {
        input = new Input(this);
        Gdx.input.setInputProcessor(input);
 
-
-        TextureAtlas charSet = new TextureAtlas(Gdx.files.internal("explosion.atlas"));
-        ani = new Animation<>(1/25f, charSet.findRegions("light"));
     }
 
 
@@ -76,6 +74,7 @@ public class GameScreen implements Screen {
 //        SPAWNERS
         asteroids.spawnAsteroid();
 
+
 //        UPDATERS
         bullets.update();
         asteroids.update();
@@ -87,13 +86,11 @@ public class GameScreen implements Screen {
 
 
         player.draw(game);
-        leftbutton.draw(game);
-        rightButton.draw(game);
-        fireButton.draw(game);
 
         bullets.render();
         asteroids.render();
         aniHandler.render();
+        uiHandler.render();
 
 
         String waveString = "Wave: " + waveHandler.wave;
