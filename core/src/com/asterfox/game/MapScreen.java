@@ -15,8 +15,8 @@ public class MapScreen implements Screen {
     public AsterFox game;
     final OrthographicCamera cam;
     private PlanetHandler planetHandler;
-    public float[] locsX = {700, 610, 540, 470, 395, 330, 220, 140, 50};
-    public float[] locsY = {50, 265, 65, 390, 155, 305, 85, 210, 320};
+    public float[] locsX = {50, 140, 220, 330, 395, 470, 540, 610, 700};
+    public float[] locsY = {320, 210, 85, 305, 155, 390, 65, 265, 50};
 
     public MapScreen(AsterFox game){
         this.game = game;
@@ -40,7 +40,7 @@ public class MapScreen implements Screen {
         game.batch.setProjectionMatrix(cam.combined); // LOOK UP WHAT THIS IS DOING
 
 
-        planetHandler.update();
+        planetHandler.updateMap();
 
         game.batch.begin();
             planetHandler.renderMap();
@@ -57,8 +57,7 @@ public class MapScreen implements Screen {
                         (touchPos.x > locsX[i] && touchPos.x < locsX[i] + 64) &&
                         (touchPos.y > locsY[i] && touchPos.y < locsY[i] + 64)
                 ) {
-                    if (planetHandler.planetsUnlocked.contains(planetHandler.planetOptions[i], true)){
-                        game.selectedLevel = i;
+                    if (game.waveHandler.planetsUnlocked.contains(game.waveHandler.planetOptions[i], true)){
                         game.setScreen(new GameScreen(game));
                         dispose();
                     }

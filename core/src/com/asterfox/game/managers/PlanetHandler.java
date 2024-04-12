@@ -7,21 +7,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class PlanetHandler {
     public Array<Planet> planets;
-    public String[] planetOptions = new String[]{
-            "planet01.png",
-            "planet02.png",
-            "planet03.png",
-            "planet04.png",
-            "planet05.png",
-            "planet06.png",
-            "planet07.png",
-            "planet08.png",
-            "planet09.png",
 
-    };
-    public Array<String> planetsUnlocked = new Array<String>(){};
-    public Array<String> planetsComplete = new Array<String>(){};
-    public String currentLevel;
     private GameScreen gs;
     private MapScreen ms;
 
@@ -32,7 +18,6 @@ public class PlanetHandler {
     public PlanetHandler(MapScreen ms){
         this.ms = ms;
         planets = new Array<Planet>(){};
-        planetsUnlocked.add("planet08.png");
     }
 
     public void render(){
@@ -48,17 +33,25 @@ public class PlanetHandler {
     public void update(){
         for (int i = 0; i < planets.size; i++) {
             planets.get(i).update();
+        }
+    }
+    public void updateMap(){
+        for (int i = 0; i < planets.size; i++) {
 
-            if (planetsComplete.contains(planetOptions[i],true)){
+            if (!ms.game.waveHandler.planetsUnlocked.contains(ms.game.waveHandler.planetOptions[i], true)){
+                planets.get(i).planet.setColor(255,255,255,0.25f);
+            } else if (ms.game.waveHandler.planetsComplete.contains(ms.game.waveHandler.planetOptions[i],true)){
                 planets.get(i).planet.setColor(0, 122, 0, 1);
+            } else {
+                planets.get(i).planet.setColor(255,255,255,1);
             }
         }
     }
 
     public void spawnPlanet(int index, float x, float y){
         Planet p = new Planet(
-                gs,
-                planetOptions[index],
+                ms,
+                ms.game.waveHandler.planetOptions[index],
                 new float[]{
                     x,
                     y,
@@ -67,16 +60,14 @@ public class PlanetHandler {
                 }
                 );
 
-        if (!planetsUnlocked.contains(planetOptions[index], true)){
-            p.planet.setColor(255,255,255,0.25f);
-        }
+
 
         planets.add(p);
     };
     public void spawnPlanet(int index){
         Planet p = new Planet(
                 gs,
-                planetOptions[index],
+                gs.game.waveHandler.planetOptions[index],
                 new float[]{
                         200,
                         200,

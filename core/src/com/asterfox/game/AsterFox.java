@@ -17,7 +17,6 @@ public class AsterFox extends Game {
 		font = new BitmapFont(); // uses default font currently
 		this.setScreen(new MainMenu(this));
 		waveHandler = new WaveHandler(this);
-
 	}
 
 	@Override

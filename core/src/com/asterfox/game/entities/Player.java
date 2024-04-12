@@ -54,9 +54,6 @@ public class Player extends Entity{
              if (moveRight && player.getX() < 800 - 64){
                  player.setX(player.getX() + speed);
              }
-             System.out.println(speed);
-             System.out.println(moveLeft);
-             System.out.println(moveRight);
          } else if (speed <= 0) {
              moveRight = false;
              moveLeft = false;
