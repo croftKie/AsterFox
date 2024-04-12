@@ -1,11 +1,11 @@
 package com.asterfox.game;
 
-import com.asterfox.game.entities.Bullet;
 import com.asterfox.game.entities.Button;
 import com.asterfox.game.entities.Player;
 import com.asterfox.game.managers.AnimationHandler;
 import com.asterfox.game.managers.AsteroidHandler;
 import com.asterfox.game.managers.BulletHandler;
+import com.asterfox.game.managers.PlanetHandler;
 import com.asterfox.game.managers.SoundHandler;
 import com.asterfox.game.managers.UiHandler;
 import com.asterfox.game.managers.WaveHandler;
@@ -13,10 +13,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
@@ -29,11 +27,14 @@ public class GameScreen implements Screen {
     public AsteroidHandler asteroids;
     public BulletHandler bullets;
     public SoundHandler soundHandler;
-    public WaveHandler waveHandler;
     public AnimationHandler aniHandler;
     public UiHandler uiHandler;
+    public PlanetHandler planetHandler;
 
+    public Texture planet;
     public Sprite hitAsteroid = null;
+
+    public float deltaTime;
 
     public GameScreen(AsterFox game){
        this.game = game;
@@ -43,12 +44,13 @@ public class GameScreen implements Screen {
         bullets = new BulletHandler(this);
         asteroids = new AsteroidHandler(this);
         soundHandler = new SoundHandler(this);
-        waveHandler = new WaveHandler(this);
         aniHandler = new AnimationHandler(this);
         uiHandler = new UiHandler(this);
+        planetHandler = new PlanetHandler(this);
 
        generatePlayer();
 
+       planet = new Texture(Gdx.files.internal("planet09.png"));
 
 
        input = new Input(this);
@@ -62,10 +64,12 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         soundHandler.playMusic();
+        planetHandler.spawnPlanet(game.selectedLevel);
     }
 
     @Override
     public void render(float delta) {
+        deltaTime = delta;
         ScreenUtils.clear(Color.BLACK);
         cam.update();
         game.batch.setProjectionMatrix(cam.combined);
@@ -74,27 +78,26 @@ public class GameScreen implements Screen {
 //        SPAWNERS
         asteroids.spawnAsteroid();
 
-
 //        UPDATERS
         bullets.update();
         asteroids.update();
         aniHandler.update();
-
+        planetHandler.update();
+        player.update();
 
 //        RENDER BATCH
         game.batch.begin();
-
-
+        planetHandler.render();
         player.draw(game);
-
         bullets.render();
         asteroids.render();
         aniHandler.render();
         uiHandler.render();
 
 
-        String waveString = "Wave: " + waveHandler.wave;
-        String scoreString = "Asteroids Left: " + waveHandler.score;
+
+        String waveString = "Wave: " + game.waveHandler.wave;
+        String scoreString = "Asteroids Left: " + game.waveHandler.score;
         game.font.getData().setScale(1.5f,1.5f);
         game.font.setColor(Color.WHITE);
         game.font.draw(game.batch, waveString, 10, 460);
@@ -118,7 +121,6 @@ public class GameScreen implements Screen {
         }
 
         if(player.destroyed){
-            System.out.println("firing");
             player.player.setY(player.player.getY() - 2);
             player.player.rotate(4);
             if(player.player.getY() < - 64){
@@ -170,36 +172,6 @@ public class GameScreen implements Screen {
                 },
                 cam
         );
-    }
-
-    public void generateUI(){
-        leftbutton = new Button(
-                "left_button.png",
-                new float[]{
-                        100 - 64 / 2,
-                        40,
-                        64,
-                        64
-                });
-        rightButton = new Button(
-                "right_button.png",
-                new float[]{
-                        200 - 64 / 2,
-                        40,
-                        64,
-                        64
-                }
-        );
-        fireButton = new Button(
-                "fire_button.png",
-                new float[]{
-                        650 - 64 / 2,
-                        40,
-                        64,
-                        64
-                }
-        );
-
     }
 
 }

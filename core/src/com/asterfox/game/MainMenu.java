@@ -40,8 +40,6 @@ public class MainMenu implements Screen {
         cam.setToOrtho(false, vp_width, vp_height);
     }
 
-
-
     @Override
     public void show() {
 
@@ -57,35 +55,26 @@ public class MainMenu implements Screen {
         game.batch.begin();
 
 
-        if (!intro){
+        player.draw(game);
+        large.asteroid.rotate(0.1f);
+        large.render(game);
+        small.asteroid.rotate(-0.1f);
+        small.render(game);
+        tiny.asteroid.rotate(-0.2f);
+        tiny.render(game);
 
-            player.draw(game);
-            large.asteroid.rotate(0.1f);
-            large.render(game);
-            small.asteroid.rotate(-0.1f);
-            small.render(game);
-            tiny.asteroid.rotate(-0.2f);
-            tiny.render(game);
 
-            game.batch.draw(title, 10, 350, 256, 64);
-            game.batch.draw(play, 140, 270, 128, 64);
-            game.batch.draw(about, 140, 200, 128, 84);
-            game.batch.draw(quit, 140, 150, 128, 64);
-
-        }
-
-        if (intro) {
-            game.batch.draw(intro_texts, 10, 90, 576, 460);
-            playerAlt.draw(game);
-        }
+        game.batch.draw(title, 10, 350, 256, 64);
+        game.batch.draw(play, 140, 270, 128, 64);
+        game.batch.draw(about, 140, 200, 128, 84);
+        game.batch.draw(quit, 140, 150, 128, 64);
 
 
         game.batch.end();
         if (Gdx.input.isTouched()) {
-            if(intro){
-                clickButtonAlt(playerAlt);
-            }
-            clickButton(player);
+            clickButtonAlt(140, 270, 128, 84, new MapScreen(game));
+            clickButtonAlt(140, 200, 128, 64, new AboutScreen(game));
+            clickQuit(140, 150, 128, 64);
         }
     }
 
@@ -113,7 +102,6 @@ public class MainMenu implements Screen {
     public void dispose() {
 
     }
-
 
 
 //    UTILS
@@ -190,37 +178,34 @@ public class MainMenu implements Screen {
                 1
         );
     }
-    public void clickButton(Player player){
+    public void clickButtonAlt(int x, int y, int width, int height, Screen screen){
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(touchPos);
-        if (touchPos.x > player.player.getX() && touchPos.x < player.player.getX() + player.player.getWidth()) {
-            if (touchPos.y > player.player.getY() && touchPos.y < player.player.getY() + player.player.getHeight()) {
-                player.player.setScale(1.5f);
-                intro = true;
-
+        if (touchPos.x > x && touchPos.x < x + width) {
+            if (touchPos.y > y && touchPos.y < y + height) {
+                game.setScreen(screen);
+                dispose();
             }
         }
     };
-    public void clickButtonAlt(Player player){
+    public void clickQuit(int x, int y, int width, int height){
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(touchPos);
-        if (touchPos.x > player.player.getX() && touchPos.x < player.player.getX() + player.player.getWidth()) {
-            if (touchPos.y > player.player.getY() && touchPos.y < player.player.getY() + player.player.getHeight()) {
-                if(intro) {
-                    game.setScreen(new GameScreen(game));
-                    dispose();
-                }
+        if (touchPos.x > x && touchPos.x < x + width) {
+            if (touchPos.y > y && touchPos.y < y + height) {
+                Gdx.app.exit();
+                System.exit(0);
             }
         }
-    };
-
+    }
     public void generateMenuImages(){
         title = new Texture(Gdx.files.internal("title.png"));
         play = new Texture(Gdx.files.internal("play.png"));
         about = new Texture(Gdx.files.internal("about.png"));
         quit = new Texture(Gdx.files.internal("quit.png"));
         intro_texts = new Texture(Gdx.files.internal("intro_text.png"));
+
     }
 }

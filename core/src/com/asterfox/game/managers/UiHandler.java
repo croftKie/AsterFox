@@ -37,6 +37,7 @@ public class UiHandler {
                         64,
                         64
                 });
+        leftbutton.button.setColor(255, 255,255,0.5f);
         rightButton = new Button(
                 "right_button.png",
                 new float[]{
@@ -46,6 +47,7 @@ public class UiHandler {
                         64
                 }
         );
+        rightButton.button.setColor(255, 255,255,0.5f);
         fireButton = new Button(
                 "fire_button.png",
                 new float[]{
@@ -55,6 +57,7 @@ public class UiHandler {
                         64
                 }
         );
+        fireButton.button.setColor(255, 255,255,0.5f);
         speedButton = new Button(
                 "boost.png",
                 new float[]{
@@ -64,6 +67,7 @@ public class UiHandler {
                         64
                 }
         );
+        speedButton.button.setColor(255, 255,255,0.5f);
         reloadButton = new Button(
                 "reload.png",
                 new float[]{
@@ -73,7 +77,7 @@ public class UiHandler {
                         64
                 }
         );
-
+        reloadButton.button.setColor(255, 255,255,0.5f);
     }
 
     public void generateHUD(){

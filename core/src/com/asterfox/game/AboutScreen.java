@@ -10,14 +10,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class GameOver implements Screen {
+public class AboutScreen implements Screen {
 
     final AsterFox game;
     final OrthographicCamera cam;
     final Rectangle menuRect;
-    private Texture over, try_again;
-    private Asteroid large;
-    public GameOver(AsterFox game){
+    private Texture about, back;
+    public AboutScreen(AsterFox game){
         this.game = game;
 
         menuRect = new Rectangle();
@@ -27,7 +26,6 @@ public class GameOver implements Screen {
         menuRect.height = 300;
 
         generateMenuImages();
-        generateAsteroids();
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, 800, 480);
@@ -39,7 +37,6 @@ public class GameOver implements Screen {
     public void show() {
 
     }
-
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
@@ -49,36 +46,30 @@ public class GameOver implements Screen {
 
         game.batch.begin();
 
-        large.render(game);
-        game.batch.draw(over, 400 - 256, 240, 512, 128);
-        game.batch.draw(try_again, 400 - 263, 90, 256, 128);
+        game.batch.draw(about, 0, 0, 800, 480);
+        game.batch.draw(back, 10, 380, 64, 64);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
-            clickButton(400 - 263, 90, 256, 128, new MainMenu(game));
+            clickButton(10, 380, 64, 64, new MainMenu(game));
         }
     }
-
     @Override
     public void resize(int width, int height) {
 
     }
-
     @Override
     public void pause() {
 
     }
-
     @Override
     public void resume() {
 
     }
-
     @Override
     public void hide() {
 
     }
-
     @Override
     public void dispose() {
 
@@ -86,24 +77,8 @@ public class GameOver implements Screen {
 
 
     public void generateMenuImages(){
-        over = new Texture(Gdx.files.internal("game_over.png"));
-        try_again = new Texture(Gdx.files.internal("try again.png"));
-    }
-
-    public void generateAsteroids(){
-        large = new Asteroid(
-                "meteor_large.png",
-                new float[]{
-                        700,
-                        400,
-                        64,
-                        64,
-                },
-                this,
-                1,
-                1
-        );
-        large.asteroid.setScale(4);
+        about = new Texture(Gdx.files.internal("about_screen.png"));
+        back = new Texture(Gdx.files.internal("back-button.png"));
     }
 
     public void clickButton(int x, int y, int width, int height, Screen screen){
@@ -119,3 +94,4 @@ public class GameOver implements Screen {
     };
 
 }
+

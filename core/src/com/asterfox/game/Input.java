@@ -77,7 +77,7 @@ public class Input implements InputProcessor {
         gs.uiHandler.speedButton.button.setScale(1, 1);
         gs.uiHandler.reloadButton.button.setScale(1, 1);
         gs.player.resetPlayerMovement();
-        gs.player.speed = 5;
+        gs.player.isMoving = false;
         gs.soundHandler.engine.stop();
         return false;
     }

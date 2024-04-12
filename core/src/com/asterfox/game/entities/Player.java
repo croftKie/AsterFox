@@ -6,6 +6,7 @@ import com.asterfox.game.GameScreen;
 import com.asterfox.game.MainMenu;
 import com.asterfox.game.animations.Engine;
 import com.asterfox.game.managers.AsteroidHandler;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,7 +21,10 @@ public class Player extends Entity{
     public GameScreen gs;
     public MainMenu mm;
     public boolean destroyed = false;
-    public int speed = 5;
+    public float speed = 5;
+    public float acceleration = 6f;
+    public boolean moveLeft, moveRight, isMoving;
+
     public Player(GameScreen gs, String assetFile, float[] dimens, OrthographicCamera cam){
         this.gs = (GameScreen) gs;
         this.cam = cam;
@@ -41,22 +45,48 @@ public class Player extends Entity{
     public void draw(AsterFox game){
         draw(game, player);
     }
+    public void update(){
+         if(speed > 0 && !isMoving) {
+             speed -= acceleration * gs.deltaTime;
+             if (moveLeft && player.getX() > 0){
+                player.setX(player.getX() - speed);
+             }
+             if (moveRight && player.getX() < 800 - 64){
+                 player.setX(player.getX() + speed);
+             }
+             System.out.println(speed);
+             System.out.println(moveLeft);
+             System.out.println(moveRight);
+         } else if (speed <= 0) {
+             moveRight = false;
+             moveLeft = false;
+         }
+    }
 
     public void moveLeft(){
+        moveLeft = true;
+        isMoving = true;
+        speed = 5;
+
         float x = player.getX() - speed;
 
-        if (x > 0){
+        if (x >= 0){
             player.setX(x);
             player.setRotation(10);
         }
     }
     public void moveRight(){
+        moveRight = true;
+        isMoving = true;
+        speed = 5;
         float x = player.getX() + speed;
+
         if (x < 800 - 64){
             player.setX(x);
             player.setRotation(-10);
         }
     }
+
     public void resetPlayerMovement(){
         player.setRotation(0);
     }

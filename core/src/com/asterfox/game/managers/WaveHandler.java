@@ -1,19 +1,27 @@
 package com.asterfox.game.managers;
 
+import com.asterfox.game.AsterFox;
 import com.asterfox.game.GameScreen;
+import com.asterfox.game.MapScreen;
 
 public class WaveHandler {
-    GameScreen gs;
+    AsterFox game;
     public int wave = 1;
     public int score = 20;
-    public WaveHandler(GameScreen gs){
-        this.gs = gs;
+    public WaveHandler(AsterFox game){
+        this.game = game;
     }
 
     public void updateWave(){
-        if(score == 0){
-            increaseWave();
-            increaseScore();
+        if(score < 1){
+            if (wave % 2 == 0){
+                game.setScreen(new MapScreen(game));
+                wave = 1;
+                increaseScore();
+            } else {
+                increaseWave();
+                increaseScore();
+            }
         }
     }
 
@@ -22,7 +30,7 @@ public class WaveHandler {
     }
 
     public void decreaseScore(){
-        if(score > 0){
+        if(score >= 1){
             score--;
         } else {
             updateWave();

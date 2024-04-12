@@ -43,7 +43,7 @@ public class Asteroid extends Entity{
     }
 
     private void moveAsteroid(){
-        float y = asteroid.getY() - (3 * (gs.waveHandler.wave * 0.55f));
+        float y = asteroid.getY() - (3 * (gs.game.waveHandler.wave * 0.55f));
         asteroid.setY(y);
         asteroid.setX(asteroid.getX() + xOption);
         asteroid.rotate(rotationOption);
@@ -57,7 +57,7 @@ public class Asteroid extends Entity{
             if (asteroid.getBoundingRectangle().overlaps(gs.bullets.bullets.get(i).bullet.getBoundingRectangle())) {
 
                 gs.bullets.bullets.removeIndex(i);
-                gs.waveHandler.decreaseScore();
+                gs.game.waveHandler.decreaseScore();
                 break;
             }
         }
