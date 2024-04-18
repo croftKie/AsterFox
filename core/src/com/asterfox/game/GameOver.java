@@ -51,11 +51,11 @@ public class GameOver implements Screen {
 
         large.render(game);
         game.batch.draw(over, 400 - 256, 240, 512, 128);
-        game.batch.draw(try_again, 400 - 263, 90, 256, 128);
+        game.batch.draw(try_again, 400, 90, 256, 128);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
-            clickButton(400 - 263, 90, 256, 128, new MainMenu(game));
+            clickButton(400, 90, 256, 128, new MainMenu(game));
         }
     }
 

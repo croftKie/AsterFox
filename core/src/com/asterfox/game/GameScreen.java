@@ -105,6 +105,11 @@ public class GameScreen implements Screen {
 
         game.batch.end();
 
+
+        System.out.println(player.player.getWidth());
+        System.out.println(player.player.getHeight());
+        System.out.println(player.player.getBoundingRectangle().getWidth());
+        System.out.println(player.player.getBoundingRectangle().getHeight());
         player.destroyPlayer(asteroids);
 
 

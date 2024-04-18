@@ -27,8 +27,12 @@ public class MainMenu implements Screen {
     private Asteroid small;
     private Asteroid tiny;
     private boolean intro = false;
-    private Texture title;
-    private Texture play, about, quit, intro_texts;
+    private Sprite title;
+    private Sprite play, about, quit, intro_texts;
+    private boolean leaving = false;
+    private float limit = 3;
+    private float timer = 0;
+    private Screen destination;
     public MainMenu(AsterFox game){
         this.game = game;
 
@@ -64,10 +68,10 @@ public class MainMenu implements Screen {
         tiny.render(game);
 
 
-        game.batch.draw(title, 10, 350, 256, 64);
-        game.batch.draw(play, 140, 270, 128, 64);
-        game.batch.draw(about, 140, 200, 128, 84);
-        game.batch.draw(quit, 140, 150, 128, 64);
+        game.batch.draw(title, title.getX(), title.getY(), 256, 64);
+        game.batch.draw(play, play.getX(), play.getY(), 128, 64);
+        game.batch.draw(about, about.getX(), about.getY(), 128, 84);
+        game.batch.draw(quit, quit.getX(), quit.getY(), 128, 64);
 
 
         game.batch.end();
@@ -76,6 +80,36 @@ public class MainMenu implements Screen {
             clickButtonAlt(140, 200, 128, 64, new AboutScreen(game));
             clickQuit(140, 150, 128, 64);
         }
+
+        if (leaving){
+            if (timer <= limit){
+                title.setX(title.getX() - 500 * delta);
+                play.setX(play.getX() - 410 * delta);
+                about.setX(about.getX() - 325 * delta);
+                quit.setX(quit.getX() - 260 * delta);
+                player.player.translate(-200 * delta, 200 * delta);
+
+
+                if(timer > 0.5){
+                    small.asteroid.translate(200 * delta, 200 * delta);
+                    tiny.asteroid.translate(50 * delta, 200 * delta);
+                }
+
+                if (timer > 1){
+                    large.asteroid.translate(0 * delta, -280 * delta);
+                }
+
+
+                System.out.println(timer += delta);
+                System.out.println(limit);
+            } else {
+                leaving = false;
+                game.setScreen(destination);
+                dispose();
+            }
+        }
+
+
     }
 
     @Override
@@ -168,7 +202,7 @@ public class MainMenu implements Screen {
         tiny = new Asteroid(
                 "meteor_small.png",
                 new float[]{
-                        400,
+                        320,
                         300,
                         64,
                         64
@@ -182,10 +216,11 @@ public class MainMenu implements Screen {
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(touchPos);
+
         if (touchPos.x > x && touchPos.x < x + width) {
             if (touchPos.y > y && touchPos.y < y + height) {
-                game.setScreen(screen);
-                dispose();
+                destination = screen;
+                leaving = true;
             }
         }
     };
@@ -201,11 +236,24 @@ public class MainMenu implements Screen {
         }
     }
     public void generateMenuImages(){
-        title = new Texture(Gdx.files.internal("title.png"));
-        play = new Texture(Gdx.files.internal("play.png"));
-        about = new Texture(Gdx.files.internal("about.png"));
-        quit = new Texture(Gdx.files.internal("quit.png"));
-        intro_texts = new Texture(Gdx.files.internal("intro_text.png"));
+        title = new Sprite(new Texture(Gdx.files.internal("title.png")), 512, 128);
+        title.setX(10);
+        title.setY(350);
 
+        play = new Sprite(new Texture(Gdx.files.internal("play.png")), 256, 128);
+        play.setX(140);
+        play.setY(270);
+
+        about = new Sprite(new Texture(Gdx.files.internal("about.png")), 256, 128);
+        about.setX(140);
+        about.setY(200);
+
+        quit = new Sprite(new Texture(Gdx.files.internal("quit.png")), 256, 128);
+        quit.setX(140);
+        quit.setY(150);
+
+        intro_texts = new Sprite(new Texture(Gdx.files.internal("intro_text.png")), 645, 387);
+        intro_texts.setX(10);
+        intro_texts.setY(350);
     }
 }

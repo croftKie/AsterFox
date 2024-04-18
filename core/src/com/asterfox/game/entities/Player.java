@@ -30,6 +30,7 @@ public class Player extends Entity{
         this.cam = cam;
         player = createAsset(assetFile, dimens);
 
+
         gs.aniHandler.createEngineAnim(
                 player.getX(),
                 player.getY() - player.getHeight());
@@ -93,7 +94,12 @@ public class Player extends Entity{
         Iterator<Asteroid> AsterIt = asteroids.asteroids.iterator();
         while (AsterIt.hasNext()){
             Asteroid currentAsteroid = AsterIt.next();
-            if (currentAsteroid.asteroid.getBoundingRectangle().overlaps(player.getBoundingRectangle())){
+            if (
+                    currentAsteroid.asteroid.getBoundingRectangle().contains(
+                            player.getX() + player.getWidth() / 2,
+                            player.getY() + player.getHeight() / 2
+                    )
+            ){
                 currentAsteroid.asteroid.setX(-currentAsteroid.asteroid.getX());
                 gs.aniHandler.engine.complete = true;
                 gs.soundHandler.playExplosion();
