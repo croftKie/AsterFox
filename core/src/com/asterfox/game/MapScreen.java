@@ -16,8 +16,8 @@ public class MapScreen implements Screen {
     public AsterFox game;
     final OrthographicCamera cam;
     private PlanetHandler planetHandler;
-    public float[] locsX = {50, 140, 220, 330, 395, 470, 540, 610, 700};
-    public float[] locsY = {120, 210, 85, 305, 155, 390, 65, 265, 50};
+    public float[] locsX = {80, 280, 90, 120, 290};
+    public float[] locsY = {110, 270, 390, 530, 650};
     private Texture back;
 
     public MapScreen(AsterFox game){
@@ -47,7 +47,7 @@ public class MapScreen implements Screen {
 
         game.batch.begin();
             planetHandler.renderMap();
-            game.batch.draw(back, 10, 380, 64, 64);
+            game.batch.draw(back, 10, 730, 64, 64);
         game.batch.end();
 
 

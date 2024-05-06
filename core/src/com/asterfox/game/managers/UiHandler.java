@@ -15,6 +15,15 @@ public class UiHandler {
         generateHUD();
     }
 
+    public void update(){
+        leftbutton.button.setX(gs.player.player.getX() - 220);
+        rightButton.button.setX(gs.player.player.getX() - 110);
+        fireButton.button.setX(gs.player.player.getX() + 100);
+        speedButton.button.setX(gs.player.player.getX() + 180);
+        reloadButton.button.setX(gs.player.player.getX() + 180);
+
+    }
+
     public void render(){
         leftbutton.draw(gs.game);
         rightButton.draw(gs.game);
@@ -32,8 +41,8 @@ public class UiHandler {
         leftbutton = new Button(
                 "left_button.png",
                 new float[]{
+                        gs.player.player.getX() - 220,
                         60,
-                        40,
                         64,
                         64
                 });
@@ -41,8 +50,8 @@ public class UiHandler {
         rightButton = new Button(
                 "right_button.png",
                 new float[]{
-                        150,
-                        40,
+                        gs.player.player.getX() - 110,
+                        60,
                         64,
                         64
                 }
@@ -51,7 +60,7 @@ public class UiHandler {
         fireButton = new Button(
                 "fire_button.png",
                 new float[]{
-                        800 - 124,
+                        gs.player.player.getX() + 100,
                         40,
                         64,
                         64
@@ -61,7 +70,7 @@ public class UiHandler {
         speedButton = new Button(
                 "boost.png",
                 new float[]{
-                        800 - 124,
+                        gs.player.player.getX() + 180,
                         120,
                         64,
                         64
@@ -71,7 +80,7 @@ public class UiHandler {
         reloadButton = new Button(
                 "reload.png",
                 new float[]{
-                        800 - 218,
+                        gs.player.player.getX() + 180,
                         40,
                         64,
                         64
@@ -82,14 +91,14 @@ public class UiHandler {
 
     public void generateHUD(){
         bulletIcons = new Array<Icon>();
-        for (int i = 1; i <= gs.bullets.bulletsLoaded; i++) {
+        for (int i = 0; i <= gs.bullets.bulletsLoaded; i++) {
             Icon tempIcon = new Icon(
                     "bullet.png",
                     new float[]{
-                            32 * i,
-                            350,
-                            32,
-                            32
+                            (32 * i),
+                            680,
+                            16,
+                            16
                     }
             );
             bulletIcons.add(tempIcon);

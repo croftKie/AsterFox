@@ -45,8 +45,8 @@ public class AsteroidHandler {
             Asteroid asteroid = new Asteroid(
                     asteroidAssets[MathUtils.random(0,3)],
                     new float[]{
-                    MathUtils.random(0, 800),
-                    480 + 64,
+                    MathUtils.random(gs.player.player.getX() - 300, gs.player.player.getX() + 300),
+                    800 + 64,
                     64,
                     64
                     },

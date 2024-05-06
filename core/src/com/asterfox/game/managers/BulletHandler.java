@@ -46,9 +46,9 @@ public class BulletHandler {
             Bullet bullet = new Bullet(
                     "bullet.png",
                     new float[]{
-                            gs.player.player.getX(),
+                            gs.player.player.getX() + 24,
                             gs.player.player.getY(),
-                            64,
+                            16,
                             64
                     },
                     gs);

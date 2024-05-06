@@ -14,6 +14,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
+
 import static com.asterfox.game.constants.Data.UI.*;
 import static com.asterfox.game.constants.Data.GameWindow.*;
 
@@ -26,12 +29,11 @@ public class MainMenu implements Screen {
     private Asteroid large;
     private Asteroid small;
     private Asteroid tiny;
-    private boolean intro = false;
     private Sprite title;
     private Sprite play, about, quit, intro_texts;
     private boolean leaving = false;
-    private float limit = 3;
-    private float timer = 0;
+    private float limit = 3F;
+    private Long timer;
     private Screen destination;
     public MainMenu(AsterFox game){
         this.game = game;
@@ -76,12 +78,17 @@ public class MainMenu implements Screen {
 
         game.batch.end();
         if (Gdx.input.isTouched()) {
-            clickButtonAlt(140, 270, 128, 84, new MapScreen(game));
-            clickButtonAlt(140, 200, 128, 64, new AboutScreen(game));
-            clickQuit(140, 150, 128, 64);
+            clickButtonAlt(play.getX(), play.getY(), 256, 64, new MapScreen(game));
+            clickButtonAlt(about.getX(), about.getY(), 128, 64, new AboutScreen(game));
+            clickQuit(quit.getX(), quit.getY(), 128, 64);
         }
 
         if (leaving){
+
+            timer = TimeUtils.millis() / 1000L;
+
+            System.out.println(timer);
+
             if (timer <= limit){
                 title.setX(title.getX() - 500 * delta);
                 play.setX(play.getX() - 410 * delta);
@@ -98,10 +105,6 @@ public class MainMenu implements Screen {
                 if (timer > 1){
                     large.asteroid.translate(0 * delta, -280 * delta);
                 }
-
-
-                System.out.println(timer += delta);
-                System.out.println(limit);
             } else {
                 leaving = false;
                 game.setScreen(destination);
@@ -212,11 +215,10 @@ public class MainMenu implements Screen {
                 1
         );
     }
-    public void clickButtonAlt(int x, int y, int width, int height, Screen screen){
+    public void clickButtonAlt(float x, float y, int width, int height, Screen screen){
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(touchPos);
-
         if (touchPos.x > x && touchPos.x < x + width) {
             if (touchPos.y > y && touchPos.y < y + height) {
                 destination = screen;
@@ -224,7 +226,7 @@ public class MainMenu implements Screen {
             }
         }
     };
-    public void clickQuit(int x, int y, int width, int height){
+    public void clickQuit(float x, float y, int width, int height){
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(touchPos);
@@ -237,20 +239,20 @@ public class MainMenu implements Screen {
     }
     public void generateMenuImages(){
         title = new Sprite(new Texture(Gdx.files.internal("title.png")), 512, 128);
-        title.setX(10);
-        title.setY(350);
+        title.setX(30);
+        title.setY(720);
 
         play = new Sprite(new Texture(Gdx.files.internal("play.png")), 256, 128);
         play.setX(140);
-        play.setY(270);
+        play.setY(650);
 
         about = new Sprite(new Texture(Gdx.files.internal("about.png")), 256, 128);
         about.setX(140);
-        about.setY(200);
+        about.setY(550);
 
         quit = new Sprite(new Texture(Gdx.files.internal("quit.png")), 256, 128);
         quit.setX(140);
-        quit.setY(150);
+        quit.setY(450);
 
         intro_texts = new Sprite(new Texture(Gdx.files.internal("intro_text.png")), 645, 387);
         intro_texts.setX(10);

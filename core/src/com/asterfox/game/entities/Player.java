@@ -68,7 +68,7 @@ public class Player extends Entity{
 
         float x = player.getX() - speed;
 
-        if (x >= 0){
+        if (x >= -400){
             player.setX(x);
             player.setRotation(10);
         }
@@ -79,7 +79,7 @@ public class Player extends Entity{
         speed = 5;
         float x = player.getX() + speed;
 
-        if (x < 800 - 64){
+        if (x < 1200){
             player.setX(x);
             player.setRotation(-10);
         }

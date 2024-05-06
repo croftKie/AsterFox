@@ -1,5 +1,9 @@
 package com.asterfox.game;
 
+import static com.asterfox.game.constants.Data.GameWindow.vp_height;
+import static com.asterfox.game.constants.Data.GameWindow.vp_width;
+
+import com.asterfox.game.constants.Data;
 import com.asterfox.game.entities.Button;
 import com.asterfox.game.entities.Player;
 import com.asterfox.game.managers.AnimationHandler;
@@ -39,16 +43,16 @@ public class GameScreen implements Screen {
     public GameScreen(AsterFox game){
        this.game = game;
        this.cam = new OrthographicCamera();
-       cam.setToOrtho(false, 800, 480);
+       cam.setToOrtho(false, vp_width, vp_height);
 
         bullets = new BulletHandler(this);
         asteroids = new AsteroidHandler(this);
         soundHandler = new SoundHandler(this);
         aniHandler = new AnimationHandler(this);
+        generatePlayer();
         uiHandler = new UiHandler(this);
         planetHandler = new PlanetHandler(this);
 
-       generatePlayer();
 
        planet = new Texture(Gdx.files.internal("planet09.png"));
 
@@ -71,6 +75,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         deltaTime = delta;
         ScreenUtils.clear(Color.BLACK);
+        cam.position.set(player.player.getX(), player.player.getY() + 280, 0);
         cam.update();
         game.batch.setProjectionMatrix(cam.combined);
         elapsedTime += delta;
@@ -84,6 +89,7 @@ public class GameScreen implements Screen {
         aniHandler.update();
         planetHandler.update();
         player.update();
+        uiHandler.update();
 
 //        RENDER BATCH
         game.batch.begin();
@@ -100,16 +106,11 @@ public class GameScreen implements Screen {
         String scoreString = "Asteroids Left: " + game.waveHandler.score;
         game.font.getData().setScale(1.5f,1.5f);
         game.font.setColor(Color.WHITE);
-        game.font.draw(game.batch, waveString, 10, 460);
-        game.font.draw(game.batch, scoreString, 10, 425);
+        game.font.draw(game.batch, waveString, 10, 760);
+        game.font.draw(game.batch, scoreString, 10, 730);
 
         game.batch.end();
 
-
-        System.out.println(player.player.getWidth());
-        System.out.println(player.player.getHeight());
-        System.out.println(player.player.getBoundingRectangle().getWidth());
-        System.out.println(player.player.getBoundingRectangle().getHeight());
         player.destroyPlayer(asteroids);
 
 
@@ -170,8 +171,8 @@ public class GameScreen implements Screen {
                 this,
                 "ship.png",
                 new float[]{
-                        800 / 2 - 64 / 2,
-                        80,
+                        480 / 2 - 64 / 2,
+                        160,
                         64,
                         64
                 },

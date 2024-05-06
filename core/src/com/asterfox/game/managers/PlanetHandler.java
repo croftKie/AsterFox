@@ -55,13 +55,10 @@ public class PlanetHandler {
                 new float[]{
                     x,
                     y,
-                    64,
-                    64
+                    128,
+                    128
                 }
                 );
-
-
-
         planets.add(p);
     };
     public void spawnPlanet(int index){
