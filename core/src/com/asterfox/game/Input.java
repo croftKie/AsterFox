@@ -1,5 +1,6 @@
 package com.asterfox.game;
 
+import com.asterfox.game.entities.Asteroid;
 import com.asterfox.game.entities.Bullet;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -41,30 +42,27 @@ public class Input implements InputProcessor {
         gs.cam.unproject(touchPos);
 
         if (gs.uiHandler.leftbutton.checkIfClicked(touchPos.x, touchPos.y)){
-            gs.uiHandler.leftbutton.button.setScale(1.5f,1.5f);
+            gs.uiHandler.leftbutton.button.setScale(1.2f,1.2f);
             gs.player.moveLeft();
             gs.soundHandler.playEngine();
         }
         if (gs.uiHandler.rightButton.checkIfClicked(touchPos.x, touchPos.y)){
-            gs.uiHandler.rightButton.button.setScale(1.5f, 1.5f);
+            gs.uiHandler.rightButton.button.setScale(1.2f, 1.2f);
             gs.player.moveRight();
             gs.soundHandler.playEngine();
         }
         if (gs.uiHandler.fireButton.checkIfClicked(touchPos.x, touchPos.y)){
-            gs.uiHandler.fireButton.button.setScale(1.5f, 1.5f);
-            boolean spawned = gs.bullets.spawnBullet();
-            if (spawned){
-                gs.soundHandler.playlaser();
+            for (int i = 0; i < gs.asteroids.asteroids.size; i++) {
+                if(gs.asteroids.asteroids.get(i).isDestroyable(1)){
+                    gs.asteroids.asteroids.removeIndex(i);
+                }
             }
         }
-        if (gs.uiHandler.speedButton.checkIfClicked(touchPos.x, touchPos.y)){
-            gs.uiHandler.speedButton.button.setScale(1.5f, 1.5f);
-            gs.player.speed = 7;
+        if (gs.uiHandler.up.checkIfClicked(touchPos.x, touchPos.y)){
+            gs.uiHandler.cursor.move(0);
         }
-        if (gs.uiHandler.reloadButton.checkIfClicked(touchPos.x, touchPos.y)){
-            gs.uiHandler.reloadButton.button.setScale(1.5f, 1.5f);
-            gs.bullets.bulletsLoaded = 6;
-            gs.uiHandler.generateHUD();
+        if (gs.uiHandler.down.checkIfClicked(touchPos.x, touchPos.y)){
+            gs.uiHandler.cursor.move(2);
         }
         return false;
     }
@@ -74,8 +72,6 @@ public class Input implements InputProcessor {
         gs.uiHandler.leftbutton.button.setScale(1,1);
         gs.uiHandler.rightButton.button.setScale(1, 1);
         gs.uiHandler.fireButton.button.setScale(1, 1);
-        gs.uiHandler.speedButton.button.setScale(1, 1);
-        gs.uiHandler.reloadButton.button.setScale(1, 1);
         gs.player.resetPlayerMovement();
         gs.player.isMoving = false;
         gs.soundHandler.engine.stop();

@@ -28,7 +28,7 @@ public class AboutScreen implements Screen {
         generateMenuImages();
 
         cam = new OrthographicCamera();
-        cam.setToOrtho(false, 800, 480);
+        cam.setToOrtho(false, 480, 800);
     }
 
 
@@ -46,12 +46,12 @@ public class AboutScreen implements Screen {
 
         game.batch.begin();
 
-        game.batch.draw(about, 0, 0, 800, 480);
-        game.batch.draw(back, 10, 380, 64, 64);
+        game.batch.draw(about, 0, 0, 480, 800);
+        game.batch.draw(back, 30, 720, 64, 64);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
-            clickButton(10, 380, 64, 64, new MainMenu(game));
+            clickButton(30, 720, 64, 64, new MainMenu(game));
         }
     }
     @Override

@@ -29,41 +29,24 @@ public class WaveHandler {
     }
 
     public void updateWave(){
-        if (score < 1 && wave % 2 == 0 && game.selectedLevel + 1 >= planetOptions.length){
-            game.setScreen(new MainMenu(game));
-            return;
+        if(score % 3000 == 0){
+            increaseWave();
+            increaseScore();
+        } else {
+            increaseScore();
         }
+    }
 
-        if(score < 1){
-            if (wave % 2 == 0){
-                game.setScreen(new MapScreen(game));
-                wave = 1;
-                increaseScore();
-                planetsComplete.add(game.waveHandler.planetOptions[game.selectedLevel]);
-                planetsUnlocked.add(game.waveHandler.planetOptions[game.selectedLevel + 1]);
-                game.selectedLevel++;
-            } else {
-                increaseWave();
-                increaseScore();
-            }
-        }
-
+    public void resetScore(){
+        score = 1;
     }
 
     public void increaseWave(){
         wave++;
     }
 
-    public void decreaseScore(){
-        if(score >= 1){
-            score--;
-        } else {
-            updateWave();
-        }
-    }
-
     public void increaseScore(){
-        score = (int) ((1 * wave) * 0.55);
+        score++;
      }
 
 }

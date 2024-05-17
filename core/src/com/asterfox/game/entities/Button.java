@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Button extends Entity {
-//    private Sprite skin;
     public Sprite button;
 
     public Button(String assetFile, float[] dimens){

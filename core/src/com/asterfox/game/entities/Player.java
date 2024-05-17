@@ -21,8 +21,8 @@ public class Player extends Entity{
     public GameScreen gs;
     public MainMenu mm;
     public boolean destroyed = false;
-    public float speed = 5;
-    public float acceleration = 6f;
+    public float speed = 3;
+    public float acceleration = 3f;
     public boolean moveLeft, moveRight, isMoving;
 
     public Player(GameScreen gs, String assetFile, float[] dimens, OrthographicCamera cam){
@@ -30,18 +30,8 @@ public class Player extends Entity{
         this.cam = cam;
         player = createAsset(assetFile, dimens);
 
-
-        gs.aniHandler.createEngineAnim(
-                player.getX(),
-                player.getY() - player.getHeight());
     }
 
-//    PLAYER CONSTRUCTOR FOR MAIN MENU
-    public Player(MainMenu gs, String assetFile, float[] dimens, OrthographicCamera cam){
-        this.mm = gs;
-        this.cam = cam;
-        player = createAsset(assetFile, dimens);
-    }
 
     public void draw(AsterFox game){
         draw(game, player);
@@ -64,19 +54,18 @@ public class Player extends Entity{
     public void moveLeft(){
         moveLeft = true;
         isMoving = true;
-        speed = 5;
+        speed = 3;
 
         float x = player.getX() - speed;
 
         if (x >= -400){
             player.setX(x);
-            player.setRotation(10);
         }
     }
     public void moveRight(){
         moveRight = true;
         isMoving = true;
-        speed = 5;
+        speed = 3;
         float x = player.getX() + speed;
 
         if (x < 1200){
@@ -101,7 +90,6 @@ public class Player extends Entity{
                     )
             ){
                 currentAsteroid.asteroid.setX(-currentAsteroid.asteroid.getX());
-                gs.aniHandler.engine.complete = true;
                 gs.soundHandler.playExplosion();
                 gs.aniHandler.createExplosionAnim(
                         player.getX() - (player.getWidth() / 2),

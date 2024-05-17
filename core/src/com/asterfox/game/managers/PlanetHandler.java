@@ -63,14 +63,14 @@ public class PlanetHandler {
     };
     public void spawnPlanet(int index){
         Planet p = new Planet(
-                gs,
-                gs.game.waveHandler.planetOptions[index],
-                new float[]{
-                        200,
-                        200,
-                        1280,
-                        1280
-                }
+            gs,
+            gs.game.waveHandler.planetOptions[index],
+            new float[]{
+                    100,
+                    400,
+                    400,
+                    400
+            }
         );
         planets.add(p);
     };

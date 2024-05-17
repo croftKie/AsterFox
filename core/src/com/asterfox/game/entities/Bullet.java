@@ -55,7 +55,6 @@ public class Bullet extends Entity{
             if (bullet.getBoundingRectangle().overlaps(gs.asteroids.asteroids.get(i).asteroid.getBoundingRectangle())) {
                 gs.hitAsteroid = gs.asteroids.asteroids.get(i).asteroid;
                 gs.asteroids.asteroids.removeIndex(i);
-                gs.game.waveHandler.decreaseScore();
                 gs.soundHandler.playExplosion();
                 return true;
             }

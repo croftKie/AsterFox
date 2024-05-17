@@ -26,16 +26,14 @@ public class GameScreen implements Screen {
     public OrthographicCamera cam;
     public float elapsedTime;
     public Player player;
-    public Button leftbutton, rightButton, fireButton;
     public Input input;
     public AsteroidHandler asteroids;
-    public BulletHandler bullets;
     public SoundHandler soundHandler;
     public AnimationHandler aniHandler;
     public UiHandler uiHandler;
     public PlanetHandler planetHandler;
-
-    public Texture planet;
+    public Texture stars;
+    public Texture bg, stats_bar;
     public Sprite hitAsteroid = null;
 
     public float deltaTime;
@@ -45,7 +43,6 @@ public class GameScreen implements Screen {
        this.cam = new OrthographicCamera();
        cam.setToOrtho(false, vp_width, vp_height);
 
-        bullets = new BulletHandler(this);
         asteroids = new AsteroidHandler(this);
         soundHandler = new SoundHandler(this);
         aniHandler = new AnimationHandler(this);
@@ -53,18 +50,17 @@ public class GameScreen implements Screen {
         uiHandler = new UiHandler(this);
         planetHandler = new PlanetHandler(this);
 
+        stars = new Texture(Gdx.files.internal("stars.png"));
+        bg = new Texture(Gdx.files.internal("controller.png"));
+        stats_bar = new Texture(Gdx.files.internal("Stats_Bar.png"));
 
-       planet = new Texture(Gdx.files.internal("planet09.png"));
 
-
-       input = new Input(this);
+        input = new Input(this);
        Gdx.input.setInputProcessor(input);
 
     }
 
-
 //    OVERRIDES
-
     @Override
     public void show() {
         soundHandler.playMusic();
@@ -75,7 +71,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         deltaTime = delta;
         ScreenUtils.clear(Color.BLACK);
-        cam.position.set(player.player.getX(), player.player.getY() + 280, 0);
+        cam.position.set(player.player.getX() + 30, player.player.getY() + 280, 0);
         cam.update();
         game.batch.setProjectionMatrix(cam.combined);
         elapsedTime += delta;
@@ -84,34 +80,40 @@ public class GameScreen implements Screen {
         asteroids.spawnAsteroid();
 
 //        UPDATERS
-        bullets.update();
         asteroids.update();
         aniHandler.update();
         planetHandler.update();
-        player.update();
         uiHandler.update();
+        game.waveHandler.updateWave();
 
 //        RENDER BATCH
         game.batch.begin();
+        game.batch.draw(stars, -1000, -200, stars.getWidth(), stars.getHeight());
         planetHandler.render();
-        player.draw(game);
-        bullets.render();
         asteroids.render();
         aniHandler.render();
+
+        game.batch.draw(
+                bg,
+                player.player.getX() - 210,
+                player.player.getY() - 120,
+                bg.getWidth() - 40,
+                bg.getHeight() / 2F
+        );
+        game.batch.draw(
+                stats_bar,
+                player.player.getX() - 210,
+                player.player.getY() + 90,
+                stats_bar.getWidth() - 600,
+                stats_bar.getHeight() - 50
+        );
+
+
+
+
         uiHandler.render();
 
-
-
-        String waveString = "Wave: " + game.waveHandler.wave;
-        String scoreString = "Asteroids Left: " + game.waveHandler.score;
-        game.font.getData().setScale(1.5f,1.5f);
-        game.font.setColor(Color.WHITE);
-        game.font.draw(game.batch, waveString, 10, 760);
-        game.font.draw(game.batch, scoreString, 10, 730);
-
         game.batch.end();
-
-        player.destroyPlayer(asteroids);
 
 
 //        CHECK FOR INPUTS
@@ -171,7 +173,7 @@ public class GameScreen implements Screen {
                 this,
                 "ship.png",
                 new float[]{
-                        480 / 2 - 64 / 2,
+                        480 / 2,
                         160,
                         64,
                         64

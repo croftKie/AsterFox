@@ -55,7 +55,6 @@ public class BulletHandler {
             bullets.add(bullet);
             lastBulletSpawned = TimeUtils.nanoTime();
             bulletsLoaded--;
-            gs.uiHandler.generateHUD();
             return true;
         }
         return false;

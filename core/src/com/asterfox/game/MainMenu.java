@@ -2,6 +2,7 @@ package com.asterfox.game;
 
 import com.asterfox.game.constants.Data;
 import com.asterfox.game.entities.Asteroid;
+import com.asterfox.game.entities.Planet;
 import com.asterfox.game.entities.Player;
 import com.asterfox.game.managers.WaveHandler;
 import com.badlogic.gdx.Gdx;
@@ -24,22 +25,16 @@ public class MainMenu implements Screen {
 
     final AsterFox game;
     final OrthographicCamera cam;
-    private Player player;
-    private Player playerAlt;
-    private Asteroid large;
-    private Asteroid small;
-    private Asteroid tiny;
     private Sprite title;
     private Sprite play, about, quit, intro_texts;
+    private Planet planet;
+    private Texture bg;
     private boolean leaving = false;
-    private float limit = 3F;
     private Long timer;
     private Screen destination;
     public MainMenu(AsterFox game){
         this.game = game;
 
-        generatePlayer();
-        generateAsteroids();
         generateMenuImages();
 
         cam = new OrthographicCamera();
@@ -56,63 +51,56 @@ public class MainMenu implements Screen {
         ScreenUtils.clear(Color.BLACK);
 
         cam.update(); // LOOK UP WHAT THIS IS DOING
+        planet.swingPlanet();
         game.batch.setProjectionMatrix(cam.combined); // LOOK UP WHAT THIS IS DOING
 
         game.batch.begin();
 
-
-        player.draw(game);
-        large.asteroid.rotate(0.1f);
-        large.render(game);
-        small.asteroid.rotate(-0.1f);
-        small.render(game);
-        tiny.asteroid.rotate(-0.2f);
-        tiny.render(game);
-
-
-        game.batch.draw(title, title.getX(), title.getY(), 256, 64);
-        game.batch.draw(play, play.getX(), play.getY(), 128, 64);
-        game.batch.draw(about, about.getX(), about.getY(), 128, 84);
-        game.batch.draw(quit, quit.getX(), quit.getY(), 128, 64);
-
+        game.batch.draw(bg, 0, 0, bg.getWidth(), bg.getHeight());
+        planet.render(game);
+        game.batch.draw(title, title.getX(), title.getY(), 512, 100);
+        game.batch.draw(play, play.getX(), play.getY(), 512 * 0.8F, 128 * 0.8F);
+        game.batch.draw(about, about.getX(), about.getY(), 512 * 0.3F, 128 * 0.4F);
+        game.batch.draw(quit, quit.getX(), quit.getY(), 512 * 0.8F, 128 * 0.8F);
 
         game.batch.end();
+
+
         if (Gdx.input.isTouched()) {
-            clickButtonAlt(play.getX(), play.getY(), 256, 64, new MapScreen(game));
-            clickButtonAlt(about.getX(), about.getY(), 128, 64, new AboutScreen(game));
-            clickQuit(quit.getX(), quit.getY(), 128, 64);
+            clickButtonAlt(
+                    play.getX(),
+                    play.getY(),
+                    512 * 0.8F,
+                    128 * 0.8F,
+                    new MapScreen(game)
+            );
+            clickButtonAlt(
+                    about.getX(),
+                    about.getY(),
+                    512 * 0.8F,
+                    128 * 0.8F,
+                    new AboutScreen(game)
+            );
+            clickQuit(
+                    quit.getX(),
+                    quit.getY(),
+                    512 * 0.8F,
+                    128 * 0.8F
+            );
         }
 
         if (leaving){
-
-            timer = TimeUtils.millis() / 1000L;
-
-            System.out.println(timer);
-
-            if (timer <= limit){
-                title.setX(title.getX() - 500 * delta);
-                play.setX(play.getX() - 410 * delta);
-                about.setX(about.getX() - 325 * delta);
-                quit.setX(quit.getX() - 260 * delta);
-                player.player.translate(-200 * delta, 200 * delta);
-
-
-                if(timer > 0.5){
-                    small.asteroid.translate(200 * delta, 200 * delta);
-                    tiny.asteroid.translate(50 * delta, 200 * delta);
-                }
-
-                if (timer > 1){
-                    large.asteroid.translate(0 * delta, -280 * delta);
-                }
+            if (TimeUtils.timeSinceMillis(timer) <= 1800){
+                title.setX(title.getX() - 700 * delta);
+                play.setX(play.getX() - 560 * delta);
+                about.setX(about.getX() - 445 * delta);
+                quit.setX(quit.getX() - 330 * delta);
             } else {
                 leaving = false;
                 game.setScreen(destination);
                 dispose();
             }
         }
-
-
     }
 
     @Override
@@ -143,79 +131,7 @@ public class MainMenu implements Screen {
 
 //    UTILS
 
-    public void generatePlayer(){
-        player = new Player(
-                this,
-                "ship.png",
-                new float[]{
-                        600 - 64 / 2,
-                        140,
-                        64,
-                        64
-                },
-                cam
-        );
-        player.player.setRotation(40);
-        player.player.setScale(2);
-
-        playerAlt = new Player(
-                this,
-                "ship.png",
-                new float[]{
-                        600 - 64 / 2,
-                        370,
-                        64,
-                        64
-                },
-                cam
-        );
-
-        playerAlt.player.setRotation(-40);
-        playerAlt.player.setScale(2);
-    }
-    public void generateAsteroids(){
-        large = new Asteroid(
-                "meteor_large.png",
-                new float[]{
-                        700,
-                        400,
-                        64,
-                        64,
-                },
-                this,
-                1,
-                1
-        );
-        large.asteroid.setScale(4);
-
-        small = new Asteroid(
-                "meteor_small.png",
-                new float[]{
-                        300,
-                        10,
-                        64,
-                        64
-                },
-                this,
-                1,
-                1
-        );
-        small.asteroid.setScale(4);
-
-        tiny = new Asteroid(
-                "meteor_small.png",
-                new float[]{
-                        320,
-                        300,
-                        64,
-                        64
-                },
-                this,
-                1,
-                1
-        );
-    }
-    public void clickButtonAlt(float x, float y, int width, int height, Screen screen){
+    public void clickButtonAlt(float x, float y, float width, float height, Screen screen){
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(touchPos);
@@ -223,10 +139,11 @@ public class MainMenu implements Screen {
             if (touchPos.y > y && touchPos.y < y + height) {
                 destination = screen;
                 leaving = true;
+                timer = TimeUtils.millis();
             }
         }
     };
-    public void clickQuit(float x, float y, int width, int height){
+    public void clickQuit(float x, float y, float width, float height){
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(touchPos);
@@ -238,24 +155,52 @@ public class MainMenu implements Screen {
         }
     }
     public void generateMenuImages(){
-        title = new Sprite(new Texture(Gdx.files.internal("title.png")), 512, 128);
-        title.setX(30);
-        title.setY(720);
+        title = new Sprite(
+                new Texture(Gdx.files.internal("title.png")),
+                512,
+                128);
+        title.setX(-15);
+        title.setY(600);
 
-        play = new Sprite(new Texture(Gdx.files.internal("play.png")), 256, 128);
-        play.setX(140);
-        play.setY(650);
+        play = new Sprite(
+                new Texture(Gdx.files.internal("play.png")),
+                512,
+                128);
+        play.setX(80);
+        play.setY(450);
 
-        about = new Sprite(new Texture(Gdx.files.internal("about.png")), 256, 128);
-        about.setX(140);
-        about.setY(550);
+        about = new Sprite(
+                new Texture(Gdx.files.internal("about.png")),
+                512,
+                256);
+        about.setX(30);
+        about.setY(20);
 
-        quit = new Sprite(new Texture(Gdx.files.internal("quit.png")), 256, 128);
-        quit.setX(140);
-        quit.setY(450);
+        quit = new Sprite(new Texture(
+                Gdx.files.internal("quit.png")),
+                512,
+                128);
+        quit.setX(80);
+        quit.setY(300);
 
-        intro_texts = new Sprite(new Texture(Gdx.files.internal("intro_text.png")), 645, 387);
+        intro_texts = new Sprite(
+                new Texture(Gdx.files.internal("intro_text.png")),
+                645,
+                387);
         intro_texts.setX(10);
         intro_texts.setY(350);
+
+        bg = new Texture(Gdx.files.internal("star_bg.png"));
+
+        planet = new Planet(
+                this,
+                "planet01.png",
+                new float[]{
+                    200,
+                    100,
+                    400,
+                    400
+                }
+            );
     }
 }

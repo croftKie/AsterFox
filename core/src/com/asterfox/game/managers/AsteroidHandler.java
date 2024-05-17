@@ -10,9 +10,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class AsteroidHandler {
     public String[] asteroidAssets = {
-            "meteor_small.png",
             "meteor_large.png",
-            "meteor_square_small.png",
             "meteor_square_large.png"
     };
     public int[] rotationOptions = new int[]{2, 4, -1, -3};
@@ -33,22 +31,24 @@ public class AsteroidHandler {
     }
     public void update(){
         for (int i = 0; i < asteroids.size; i++) {
-            if (asteroids.get(i).isDestroyable()){
+            if (asteroids.get(i).isDestroyable(0)){
                 asteroids.removeIndex(i);
             }
-            asteroids.get(i).update();
+            if (asteroids.size > 0){
+                asteroids.get(i).update();
+            }
         }
     }
 
     public void spawnAsteroid(){
-        if (TimeUtils.nanoTime() - lastAsteroidSpawned > 1000000000 / (gs.game.waveHandler.wave * 0.55f)){
+        if (TimeUtils.nanoTime() - lastAsteroidSpawned > 2000000000 / (gs.game.waveHandler.wave * 0.55f)){
             Asteroid asteroid = new Asteroid(
-                    asteroidAssets[MathUtils.random(0,3)],
+                    asteroidAssets[MathUtils.random(0,1)],
                     new float[]{
                     MathUtils.random(gs.player.player.getX() - 300, gs.player.player.getX() + 300),
-                    800 + 64,
-                    64,
-                    64
+                    MathUtils.random(gs.player.player.getY() + 300, gs.player.player.getY() + 800),
+                    0,
+                    0
                     },
                     gs,
                     rotationOptions[MathUtils.random(0,3)],

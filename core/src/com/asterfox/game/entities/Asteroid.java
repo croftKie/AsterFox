@@ -43,23 +43,15 @@ public class Asteroid extends Entity{
     }
 
     private void moveAsteroid(){
-        float y = asteroid.getY() - (3 * (gs.game.waveHandler.wave * 0.55f));
-        asteroid.setY(y);
-        asteroid.setX(asteroid.getX() + xOption);
-        asteroid.rotate(rotationOption);
+        asteroid.setSize(asteroid.getWidth() + 0.5F, asteroid.getHeight() + 0.5F);
     }
 
-    public boolean isDestroyable(){
-        if(asteroid.getBoundingRectangle().getY() < 0 - 64){
+    public boolean isDestroyable(int mode){
+        if(asteroid.getBoundingRectangle().getWidth() > 320){
             return true;
         }
-        for (int i = 0; i < gs.bullets.bullets.size; i++) {
-            if (asteroid.getBoundingRectangle().overlaps(gs.bullets.bullets.get(i).bullet.getBoundingRectangle())) {
-
-                gs.bullets.bullets.removeIndex(i);
-                gs.game.waveHandler.decreaseScore();
-                break;
-            }
+        if(mode == 1 && asteroid.getBoundingRectangle().contains(gs.uiHandler.cursor.cursor.getBoundingRectangle())){
+            return true;
         }
         return false;
     }
